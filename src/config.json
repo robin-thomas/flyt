@@ -1,0 +1,25 @@
+{
+  "flight": {
+    "server": "https://flight.robinthomas2591.now.sh/api",
+    "network": {
+      "name": "ropsten",
+      "network_id": "3"
+    }
+  },
+  "infura": {
+    "ipfs": {
+      "host": "ipfs.infura.io",
+      "gateway": "https://ipfs.infura.io/ipfs/",
+      "port": 5001,
+      "protocol": "https"
+    }
+  },
+  "opensky": {
+    "getFlights": "https://opensky-network.org/api/flights/departure?airport={icao}&begin={begin}&end={end}"
+  },
+  "flightstats": {
+    "api": {
+      "getFlightsByRoute": "https://flightstats-api.herokuapp.com/flex/schedules/rest/v1/json/from/{from}/to/{to}/departing/{date}?appId={appId}&appKey={appKey}"
+    }
+  }
+}

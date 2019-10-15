@@ -1,0 +1,11 @@
+.header {
+  height: 64px;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.header .title {
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}

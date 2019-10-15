@@ -1,0 +1,12 @@
+{
+  "name": "flight",
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@now/static-build" },
+    { "src": "src/api/server.js", "use": "@now/node-server" }
+  ],
+  "routes": [
+    { "src": "/api", "dest": "src/api/server.js" },
+    { "src": ".*", "dest": "public/index.html" }
+  ]
+}
