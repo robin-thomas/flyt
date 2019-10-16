@@ -1,5 +1,5 @@
 {
-  "flight": {
+  "flyt": {
     "server": "https://flight.robinthomas2591.now.sh/api",
     "network": {
       "name": "ropsten",
@@ -21,5 +21,9 @@
     "api": {
       "getFlightsByRoute": "https://flightstats-api.herokuapp.com/flex/schedules/rest/v1/json/from/{from}/to/{to}/departing/{date}?appId={appId}&appKey={appKey}"
     }
+  },
+  "kyber": {
+    "receiveETHAddress": "0x4247ACebDA3f79B15E2E29dfbDb36D0BD1AccA86",
+    "callback": "https://kyberpay-sample.knstats.com/callback"
   }
 }

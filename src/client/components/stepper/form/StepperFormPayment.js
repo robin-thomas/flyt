@@ -4,12 +4,14 @@ import { MDBBtn } from "mdbreact";
 
 import EmptyRow from "../../utils/EmptyRow";
 
+import config from "../../../../config.json";
+
 const StepperFormPayment = ({
   setNextDisabled,
   eth = 1,
-  ethAddress = "",
-  callback = encodeURIComponent("https://kyberpay-sample.knstats.com/callback"),
-  network = "ropsten"
+  ethAddress = config.kyber.receiveETHAddress,
+  callback = encodeURIComponent(config.kyber.callback),
+  network = config.flyt.network
 }) => (
   <div>
     <h4>Payment</h4>
@@ -28,7 +30,12 @@ const StepperFormPayment = ({
         title="Pay with tokens"
         target="_blank"
         rel="noopener noreferrer"
-        style={{ backgroundColor: "#59698d", color: "white", fontSize: "0.81rem", fontWeight: "400" }}
+        style={{
+          backgroundColor: "#59698d",
+          color: "white",
+          fontSize: "0.81rem",
+          fontWeight: "400"
+        }}
       >
         Pay
       </a>
