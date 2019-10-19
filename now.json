@@ -2,8 +2,14 @@
   "name": "flyt",
   "version": 2,
   "builds": [
-    { "src": "package.json", "use": "@now/static-build" },
-    { "src": "src/api/server.js", "use": "@now/node-server" }
+    {
+      "src": "package.json",
+      "use": "@now/static-build"
+    },
+    {
+      "src": "src/api/server.js",
+      "use": "@now/node-server"
+    }
   ],
   "routes": [
     {
@@ -11,6 +17,14 @@
       "dest": "src/api/server.js",
       "headers": { "Access-Control-Allow-Origin": "*" }
     },
-    { "src": ".*", "dest": "public/index.html" }
+    {
+      "src": "/policy",
+      "dest": "src/api/server.js",
+      "headers": { "Access-Control-Allow-Origin": "*" }
+    },
+    {
+      "src": ".*",
+      "dest": "public/index.html"
+    }
   ]
 }
