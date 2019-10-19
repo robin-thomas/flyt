@@ -6,34 +6,48 @@ const DataContext = React.createContext();
 
 const DataProvider = props => {
   const [disabled, setDisabled] = useState(false);
-  const [page, setPage] = useState("home");
   const [airports] = useState(Airports);
   const [openAbout, setOpenAbout] = useState(false);
 
   const [valid, setValid] = useState({
     from: false,
     to: false,
-    date: false,
+    date: false
   });
 
   const [search, setSearch] = useState({
     from: null,
     to: null,
-    date: null,
+    date: null
   });
+
+  const [flight, setFlight] = useState({
+    code: null,
+    name: null,
+    departureTime: null
+  });
+
+  const [policyId, setPolicyId] = useState(null);
+  const [policyProducts, setPolicyProducts] = useState([]);
 
   return (
     <DataContext.Provider
       value={{
         disabled,
         setDisabled,
-        page,
-        setPage,
         airports,
         search,
         setSearch,
-        valid, setValid,
-        openAbout, setOpenAbout,
+        flight,
+        setFlight,
+        valid,
+        setValid,
+        openAbout,
+        setOpenAbout,
+        policyId,
+        setPolicyId,
+        policyProducts,
+        setPolicyProducts
       }}
     >
       {props.children}

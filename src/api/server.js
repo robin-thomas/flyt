@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.post(config.flyt.api.createNewPolicy, async (req, res) => {
+app.post(config[config.app].api.createNewPolicy, async (req, res) => {
   const policy = req.body.policy;
 
   await Contract.invokeFn("createNewPolicy", policy);
@@ -16,7 +16,7 @@ app.post(config.flyt.api.createNewPolicy, async (req, res) => {
   res.status(200).send();
 });
 
-app.post(config.flyt.api.callback, async (req, res) => {
+app.post(config[config.app].api.callback, async (req, res) => {
   const policyId = Number(req.body.policyId);
   const txHash = req.body.tx;
 

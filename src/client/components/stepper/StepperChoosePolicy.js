@@ -1,33 +1,38 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
-import Chip from '@material-ui/core/Chip';
+import React, { useContext } from "react";
+
+import { makeStyles } from "@material-ui/core/styles";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import ListItemText from "@material-ui/core/ListItemText";
+import Select from "@material-ui/core/Select";
+import Checkbox from "@material-ui/core/Checkbox";
+import Chip from "@material-ui/core/Chip";
+
+import { DataContext } from "../utils/DataProvider";
+
+import config from "../../../config.json";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap"
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: "100%",
+    minWidth: "100%"
   },
   chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap"
   },
   chip: {
-    margin: 2,
+    margin: 2
   },
   noLabel: {
-    marginTop: theme.spacing(3),
-  },
+    marginTop: theme.spacing(3)
+  }
 }));
 
 const ITEM_HEIGHT = 48;
@@ -36,33 +41,26 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
+      width: 250
+    }
+  }
 };
-
-const names = [
-  'Flight Departure Delay',
-  'Flight Arrival Delay',
-  'Flight Cancellation',
-];
 
 export default function MultipleSelect() {
   const classes = useStyles();
-  const [itemName, setItemName] = React.useState([]);
 
-  const handleChange = event => {
-    setItemName(event.target.value);
-  };
+  const ctx = useContext(DataContext);
 
   return (
     <div className={classes.root}>
       <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="select-multiple-checkbox">Choose Your Items</InputLabel>
+        <InputLabel htmlFor="select-multiple-checkbox">
+          Choose Your Items
+        </InputLabel>
         <Select
           multiple
-          value={itemName}
-          onChange={handleChange}
+          value={ctx.policyProducts}
+          onChange={e => ctx.setPolicyProducts(e.target.value)}
           input={<Input id="select-multiple-chip" />}
           renderValue={selected => (
             <div className={classes.chips}>
@@ -73,9 +71,9 @@ export default function MultipleSelect() {
           )}
           MenuProps={MenuProps}
         >
-          {names.map(name => (
+          {config[config.app].policy.map(name => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={itemName.indexOf(name) > -1} />
+              <Checkbox checked={ctx.policyProducts.indexOf(name) > -1} />
               <ListItemText primary={name} />
             </MenuItem>
           ))}

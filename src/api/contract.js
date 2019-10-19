@@ -14,7 +14,7 @@ const Contract = {
     const web3 = new Web3(provider);
     return new web3.eth.Contract(
       contract.abi,
-      contract.networks[config.flyt.network.network_id].address
+      contract.networks[config[config.app].network.network_id].address
     );
   },
 

@@ -6,14 +6,14 @@ import StepperFormPayment from "./form/StepperFormPayment";
 
 const getForm = (index, props) => {
   switch (index) {
-    case 0:
+    case 2:
       return <StepperFormPayment {...props} />;
 
     case 1:
       return <StepperFormFlight {...props} />;
 
     default:
-    case 2:
+    case 0:
       return <StepperFormTravel {...props} />;
   }
 };

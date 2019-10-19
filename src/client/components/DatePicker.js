@@ -8,16 +8,14 @@ import "react-datepicker/dist/react-datepicker.min.css";
 
 import "./DatePicker.css";
 
-const Calendar = forwardRef(
-  ({ label, date, setDate, onClick }, ref) => (
-    <MDBInput
-      ref={ref}
-      label={label}
-      value={date ? format(date, 'EEE MMM d, yyyy') : ''}
-      onFocus={onClick}
-    />
-  )
-);
+const Calendar = forwardRef(({ label, date, setDate, onClick }, ref) => (
+  <MDBInput
+    ref={ref}
+    label={label}
+    value={date ? format(date, "EEE MMM d, yyyy") : ""}
+    onFocus={onClick}
+  />
+));
 
 const ScheduleDate = ({ date, setDate, label }) => (
   <DatePicker
@@ -26,13 +24,7 @@ const ScheduleDate = ({ date, setDate, label }) => (
     withPortal
     minDate={new Date()}
     onClickOutside={() => document.activeElement.blur()}
-    customInput={
-      <Calendar
-        date={date}
-        setDate={setDate}
-        label={label}
-      />
-    }
+    customInput={<Calendar date={date} setDate={setDate} label={label} />}
   />
 );
 

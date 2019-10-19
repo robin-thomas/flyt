@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 
 import StepperFormInput from "../StepperFormInput";
-import DatePicker from "../../utils/DatePicker";
+import DatePicker from "../../DatePicker";
 
 import { DataContext } from "../../utils/DataProvider";
 
@@ -20,18 +20,30 @@ const StepperFormTravel = ({ setNextDisabled }) => {
     switch (key) {
       default:
       case "from":
-        ctx.setSearch(search => { return {...search, from: value}; });
-        ctx.setValid(valid => { return {...valid, from: isValid}; });
+        ctx.setSearch(search => {
+          return { ...search, from: value };
+        });
+        ctx.setValid(valid => {
+          return { ...valid, from: isValid };
+        });
         break;
 
       case "to":
-        ctx.setSearch(search => { return {...search, to: value}; });
-        ctx.setValid(valid => { return {...valid, to: isValid}; });
+        ctx.setSearch(search => {
+          return { ...search, to: value };
+        });
+        ctx.setValid(valid => {
+          return { ...valid, to: isValid };
+        });
         break;
 
       case "date":
-        ctx.setSearch(search => { return {...search, date: value}; });
-        ctx.setValid(valid => { return {...valid, date: isValid}; });
+        ctx.setSearch(search => {
+          return { ...search, date: value };
+        });
+        ctx.setValid(valid => {
+          return { ...valid, date: isValid };
+        });
         break;
     }
   };
@@ -55,7 +67,7 @@ const StepperFormTravel = ({ setNextDisabled }) => {
         keyName="date"
         label="Travel Date"
         date={ctx.search.date}
-        setDate={(value) => set("date", value, true)}
+        setDate={value => set("date", value, true)}
       />
     </div>
   );
