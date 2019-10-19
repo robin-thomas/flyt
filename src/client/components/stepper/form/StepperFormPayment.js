@@ -8,6 +8,7 @@ import config from "../../../../config.json";
 
 const StepperFormPayment = ({
   setNextDisabled,
+  policyId,
   eth = 1,
   ethAddress = config.kyber.receiveETHAddress,
   callback = encodeURIComponent(config.kyber.callback),
@@ -25,7 +26,7 @@ const StepperFormPayment = ({
       style={{ margin: "0", padding: "0" }}
     >
       <a
-        href={`https://widget.kyber.network/v0.7.2/?type=pay&mode=popup&lang=en&receiveAddr=${ethAddress}&receiveToken=ETH&receiveAmount=${eth}&callback=${callback}&paramForwarding=true&network=${network}&theme=theme-dark`}
+        href={`https://widget.kyber.network/v0.7.2/?type=pay&mode=popup&lang=en&receiveAddr=${ethAddress}&receiveToken=ETH&receiveAmount=${eth}&callback=${callback}&paramForwarding=true&network=${network}&policyId=${policyId}&theme=theme-dark`}
         className="kyber-widget-button theme-dark theme-supported"
         title="Pay with tokens"
         target="_blank"

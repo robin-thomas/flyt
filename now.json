@@ -6,7 +6,11 @@
     { "src": "src/api/server.js", "use": "@now/node-server" }
   ],
   "routes": [
-    { "src": "/api", "dest": "src/api/server.js" },
+    {
+      "src": "/callback",
+      "dest": "src/api/server.js",
+      "headers": { "Access-Control-Allow-Origin": "*" }
+    },
     { "src": ".*", "dest": "public/index.html" }
   ]
 }

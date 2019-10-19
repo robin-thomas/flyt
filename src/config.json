@@ -1,21 +1,20 @@
 {
   "flyt": {
-    "server": "https://flight.robinthomas2591.now.sh/api",
+    "server": "https://flyt.robinthomas2591.now.sh",
     "network": {
       "name": "ropsten",
       "network_id": "3"
+    },
+    "api": {
+      "createNewPolicy": {
+        "path": "/policy",
+        "method": "post"
+      },
+      "callback": {
+        "path": "/callback",
+        "method": "post"
+      }
     }
-  },
-  "infura": {
-    "ipfs": {
-      "host": "ipfs.infura.io",
-      "gateway": "https://ipfs.infura.io/ipfs/",
-      "port": 5001,
-      "protocol": "https"
-    }
-  },
-  "opensky": {
-    "getFlights": "https://opensky-network.org/api/flights/departure?airport={icao}&begin={begin}&end={end}"
   },
   "flightstats": {
     "api": {
@@ -24,6 +23,6 @@
   },
   "kyber": {
     "receiveETHAddress": "0x4247ACebDA3f79B15E2E29dfbDb36D0BD1AccA86",
-    "callback": "https://kyberpay-sample.knstats.com/callback"
+    "callback": "https://flyt.robinthomas2591.now.sh/callback"
   }
 }
