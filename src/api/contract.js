@@ -6,6 +6,10 @@ const config = require("../../config.json");
 const contract = require("../../_build/contracts/Flyt.json");
 
 const Contract = {
+  sleep: ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  },
+
   getWeb3Provider: () => {
     return new HDWalletProvider(keys.metamask.mnemonic, keys.infura.ropsten);
   },
@@ -18,13 +22,17 @@ const Contract = {
     );
   },
 
-  invokeFn: async (fnName, ...args) => {
+  invokeFn: async (fnName, isPure, ...args) => {
     const _provider = Contract.getWeb3Provider();
     const _web3 = new Web3(_provider);
     const _contract = await Contract.getContract(_provider);
 
     const _fn = _contract.methods[fnName](...args);
-    await Contract.sendSignedTx(_web3, _fn);
+    if (isPure) {
+      return await _fn.call();
+    } else {
+      await Contract.sendSignedTx(_web3, _fn);
+    }
   },
 
   sendSignedTx: async (web3, fn) => {
@@ -45,6 +53,25 @@ const Contract = {
     } catch (err) {
       throw err;
     }
+  },
+
+  getTx: async txHash => {
+    const _provider = await Contract.getWeb3Provider();
+    const _web3 = new Web3(_provider);
+
+    // Wait till the transaction is mined.
+    let receipt = null;
+    while (true) {
+      receipt = await _web3.eth.getTransactionReceipt(txHash);
+      if (!receipt) {
+        break;
+      }
+
+      await Contract.sleep(1000 /* 1s */);
+    }
+
+    // Return tx details.
+    return await _web3.eth.getTransaction(txHash);
   }
 };
 

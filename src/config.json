@@ -7,9 +7,9 @@
       "network_id": "3"
     },
     "api": {
-      "createNewPolicy": {
+      "getPolicy": {
         "path": "/policy",
-        "method": "post"
+        "method": "get"
       },
       "callback": {
         "path": "/callback",
