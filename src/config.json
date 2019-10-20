@@ -8,7 +8,7 @@
     },
     "api": {
       "getPolicy": {
-        "path": "/policy",
+        "path": "/policy/{policyId}",
         "method": "get"
       },
       "callback": {

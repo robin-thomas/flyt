@@ -1,15 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { MDBIcon, MDBBtn } from "mdbreact";
 import { Row, Col, Spinner } from "react-bootstrap";
 
+import Api from "../../utils/Api";
 import { DataContext } from "../../utils/DataProvider";
 import EmptyRow from "../../utils/EmptyRow";
 
 const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
+  const [success, setSuccess] = useState(false);
+
   const ctx = useContext(DataContext);
 
   const reset = () => {
+    ctx.setPolicy(null);
+
     ctx.setValid({
       from: false,
       to: false,
@@ -34,12 +39,40 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
     setIndex(0);
   };
 
+  useEffect(() => {
+    const paymentCheck = async () => {
+      // Once payment is completed, webook is triggered,
+      // which creates a dummy owner policy,
+      // existance of which verifies payment is done
+      // (payment could fail though).
+
+      const decodedPolicy = JSON.parse(decodeURIComponent(ctx.policy));
+
+      while (true) {
+        try {
+          const _policy = await Api.getPolicy(decodedPolicy.policyId);
+          if (_policy && _policy.policyId === decodedPolicy.policyId) {
+            break;
+          }
+        } catch (err) {
+          // Policy doesnt exist.
+        }
+
+        await Api.sleep(1000 /* 1s */);
+      }
+
+      setSuccess(true);
+    };
+
+    paymentCheck();
+  });
+
   return (
     <div>
       <EmptyRow height="60px" />
       <Row>
         <Col className="text-center">
-          {ctx.policyId === null ? (
+          {success === false ? (
             <div>
               <h4>Waiting for payment confirmation</h4>
               <p style={{ fontSize: "13px" }}>* do not close the browser</p>

@@ -27,7 +27,7 @@ const DataProvider = props => {
     departureTime: null
   });
 
-  const [policyId, setPolicyId] = useState(null);
+  const [policy, setPolicy] = useState(null);
   const [policyProducts, setPolicyProducts] = useState([]);
 
   return (
@@ -44,8 +44,8 @@ const DataProvider = props => {
         setValid,
         openAbout,
         setOpenAbout,
-        policyId,
-        setPolicyId,
+        policy,
+        setPolicy,
         policyProducts,
         setPolicyProducts
       }}

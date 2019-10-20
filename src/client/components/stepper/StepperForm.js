@@ -7,7 +7,7 @@ import StepperFormComplete from "./form/StepperFormComplete";
 
 const getForm = (index, props) => {
   switch (index) {
-    case 0:
+    case 3:
       return <StepperFormComplete {...props} />;
 
     case 2:
@@ -17,7 +17,7 @@ const getForm = (index, props) => {
       return <StepperFormFlight {...props} />;
 
     default:
-    case 3:
+    case 0:
       return <StepperFormTravel {...props} />;
   }
 };
