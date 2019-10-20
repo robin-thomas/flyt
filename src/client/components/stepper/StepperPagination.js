@@ -9,7 +9,7 @@ const StepperBtn = ({ disabled, onClick, text, index }) => {
       color="mdb-color"
       className="btn-rounded"
       style={{ margin: "0" }}
-      disabled={index === 0}
+      disabled={disabled}
       onClick={onClick}
     >
       {text}
@@ -31,7 +31,7 @@ const StepperPagination = ({ index, setIndex, nextDisabled }) => (
       <StepperBtn
         text="Next"
         index={index}
-        disabled={nextDisabled}
+        disabled={nextDisabled || index === 2}
         onClick={() => setIndex(index + 1)}
       />
     </Col>
