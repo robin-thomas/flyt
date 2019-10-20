@@ -1,0 +1,15 @@
+.footer-container {
+  position: relative;
+  top: -80px;
+  background: #f4f5f6;
+  height: 80px;
+}
+
+.footer-container > .row {
+  height: 100%;
+}
+
+.retrieve-policy-col {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
