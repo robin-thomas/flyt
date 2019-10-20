@@ -19,7 +19,7 @@ import config from "../../../config.json";
 import "./Footer.css";
 
 const Footer = props => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [policyId, setPolicyId] = useState("");
   const [policy, setPolicy] = useState({});
 
