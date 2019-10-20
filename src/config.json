@@ -1,6 +1,5 @@
 {
-  "app": "flyt",
-  "flyt": {
+  "app": {
     "server": "https://flyt.robinthomas2591.now.sh",
     "network": {
       "name": "ropsten",

@@ -13,7 +13,7 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
   // Constant values.
   const ethAddress = config.kyber.receiveETHAddress;
   const callback = encodeURIComponent(config.kyber.callback);
-  const network = config[config.app].network.name;
+  const network = config.app.network.name;
 
   const ctx = useContext(DataContext);
 
@@ -69,10 +69,12 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
 
     document.body.removeChild(ele);
 
-    // Once payment is completed, webook is triggered,
+    // Once payment is completed, webhook is triggered,
     // which creates a dummy owner policy,
     // existance of which verifies payment is done
     // (payment could fail though).
+
+    console.log(`Policy ID: ${ctx.policy.policyId}`);
 
     while (true) {
       try {

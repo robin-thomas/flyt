@@ -9,3 +9,9 @@
   text-transform: uppercase;
   letter-spacing: 3px;
 }
+
+.accordion button {
+  margin: 0 !important;
+  padding: 0 !important;
+  text-transform: none !important;
+}

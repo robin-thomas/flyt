@@ -18,9 +18,9 @@
  *
  */
 
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const config = require("./src/keys.json");
+const keys = require("./src/keys.json");
 
 // const infuraKey = "fj4jll3k.....";
 //
@@ -38,9 +38,9 @@ module.exports = {
    * $ truffle test --network <network-name>
    */
 
-  contracts_directory: "./truffle/contracts",
-  migrations_directory: "./truffle/migrations",
-  contracts_build_directory: "./truffle/_build/contracts",
+  contracts_directory: "./src/truffle/contracts",
+  migrations_directory: "./src/truffle/migrations",
+  contracts_build_directory: "./src/truffle/_build/contracts",
 
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
@@ -69,10 +69,7 @@ module.exports = {
     // NB: It's important to wrap the provider as a function.
     ropsten: {
       provider: () =>
-        new HDWalletProvider(
-          config.metamask.mnemonic,
-          `https://ropsten.infura.io/v3/${config.infura.ropsten.key}`
-        ),
+        new HDWalletProvider(keys.metamask.mnemonic, keys.infura.ropsten.api),
       network_id: 3, // Ropsten's id
       gas: 4000000 // Ropsten has a lower block limit than mainnet
       // confirmations: 2,    // # of confs to wait between deployments. (default: 0)

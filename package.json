@@ -25,9 +25,11 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.5.1",
+    "@truffle/hdwallet-provider": "1.0.22",
     "bootstrap": "^4.3.1",
     "date-fns": "^2.4.1",
     "express": "^4.17.1",
+    "keyv": "^3.1.0",
     "lodash": "^4.17.15",
     "lzutf8": "^0.5.5",
     "mdbreact": "^4.21.0",
@@ -37,7 +39,6 @@
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.10.2",
     "react-scripts": "^3.2.0",
-    "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.2.1"
   },
   "devDependencies": {

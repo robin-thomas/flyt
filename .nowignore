@@ -1,6 +1,6 @@
 dist
 scripts
-truffle/contracts
-truffle/migrations
+src/truffle/contracts
+src/truffle/migrations
 truffle-config.json
 LICENSE

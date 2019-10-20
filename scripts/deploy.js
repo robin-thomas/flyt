@@ -6,7 +6,7 @@ const args = process.argv.slice(2).join(" ");
 console.log(`RUNNING build with args: ${args}`);
 
 const truffle = () => {
-  const network = config[config.app].network.name;
+  const network = config.app.network.name;
   const cmd = spawn("truffle", [
     "deploy",
     "--network",

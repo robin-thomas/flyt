@@ -13,8 +13,6 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
   const ctx = useContext(DataContext);
 
   const reset = () => {
-    ctx.setPolicy(null);
-
     ctx.setValid({
       from: false,
       to: false,
@@ -33,7 +31,7 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
       departureTime: null
     });
 
-    ctx.setPolicyId(null);
+    ctx.setPolicy(null);
     ctx.setPolicyProducts([]);
 
     setIndex(0);
@@ -49,7 +47,7 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
       while (true) {
         try {
           const _policy = await Api.getPolicy(ctx.policy.policyId);
-          if (_policy && _policy.policyId === ctx.policy.policyId) {
+          if (_policy && _policy.owner !== "dummy") {
             break;
           }
         } catch (err) {

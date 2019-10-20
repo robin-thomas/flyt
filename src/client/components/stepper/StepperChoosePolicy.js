@@ -71,7 +71,7 @@ export default function MultipleSelect() {
           )}
           MenuProps={MenuProps}
         >
-          {config[config.app].policy.map(name => (
+          {config.app.policy.map(name => (
             <MenuItem key={name} value={name}>
               <Checkbox checked={ctx.policyProducts.indexOf(name) > -1} />
               <ListItemText primary={name} />

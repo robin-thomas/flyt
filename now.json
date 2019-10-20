@@ -18,9 +18,10 @@
       "headers": { "Access-Control-Allow-Origin": "*" }
     },
     {
-      "src": "/policy",
+      "src": "/policy/(.+)$",
       "dest": "src/api/server.js",
-      "headers": { "Access-Control-Allow-Origin": "*" }
+      "headers": { "Access-Control-Allow-Origin": "*" },
+      "methods": ["GET"]
     },
     {
       "src": ".*",

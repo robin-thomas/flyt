@@ -48,8 +48,6 @@ const StepperFormTravel = ({ setNextDisabled }) => {
           }
         }
 
-        console.log(flights);
-
         setFlights(flights);
       }
     };

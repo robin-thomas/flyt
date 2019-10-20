@@ -16,8 +16,8 @@ const Header = props => {
         <Container style={{ height: "100%" }}>
           <Row style={{ height: "100%" }}>
             <Col md="auto" className="align-self-center title">
-              <MDBIcon icon="helicopter" />&nbsp;
-              Flight Insurance
+              <MDBIcon icon="helicopter" />
+              &nbsp; Flyt
             </Col>
             <Col md="auto" className="ml-auto align-self-center title">
               <span
@@ -30,8 +30,13 @@ const Header = props => {
           </Row>
         </Container>
       </Col>
-      <MDBModal isOpen={ctx.openAbout} toggle={() => ctx.setOpenAbout(open => !open)}>
-        <MDBModalHeader toggle={() => ctx.setOpenAbout(open => !open)}>About</MDBModalHeader>
+      <MDBModal
+        isOpen={ctx.openAbout}
+        toggle={() => ctx.setOpenAbout(open => !open)}
+      >
+        <MDBModalHeader toggle={() => ctx.setOpenAbout(open => !open)}>
+          About
+        </MDBModalHeader>
         <MDBModalBody>
           <Accordion defaultActiveKey="0">
             <Card>
@@ -43,9 +48,10 @@ const Header = props => {
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
                   <p style={{ textAlign: "justify" }}>
-                    We have no concept of <b>insurance claims</b> thanks to our blockchain technology.
-                    Every eligible policies will be paid out instantly.
-                    Never do you have to worry about flight insurance again!
+                    We have no concept of <b>insurance claims</b> thanks to our
+                    blockchain technology. Every eligible policies will be paid
+                    out instantly. Never do you have to worry about flight
+                    insurance again!
                   </p>
                 </Card.Body>
               </Accordion.Collapse>
@@ -53,16 +59,18 @@ const Header = props => {
             <Card>
               <Card.Header>
                 <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                  <b>How do we monitor how and when to make an insurance payout?</b>
+                  <b>
+                    How do we monitor how and when to make an insurance payout?
+                  </b>
                 </Accordion.Toggle>
               </Card.Header>
               <Accordion.Collapse eventKey="1">
                 <Card.Body>
                   <p style={{ textAlign: "justify" }}>
-                    All you have to do is to buy a policy.
-                    Our smart contracts will be continuously monitoring the flight details
-                    and calculate the payout accordingly.
-                    Nothing for you to do other than buying a policy!
+                    All you have to do is to buy a policy. Our smart contracts
+                    will be continuously monitoring the flight details and
+                    calculate the payout accordingly. Nothing for you to do
+                    other than buying a policy!
                   </p>
                 </Card.Body>
               </Accordion.Collapse>
@@ -76,8 +84,9 @@ const Header = props => {
               <Accordion.Collapse eventKey="2">
                 <Card.Body>
                   <p style={{ textAlign: "justify" }}>
-                    All our policies are <b>fully customizable policies</b>.
-                    You can add or remove items to your policy to create a policy that best suits you.
+                    All our policies are <b>fully customizable policies</b>. You
+                    can add or remove items to your policy to create a policy
+                    that best suits you.
                   </p>
                 </Card.Body>
               </Accordion.Collapse>
@@ -91,9 +100,9 @@ const Header = props => {
               <Accordion.Collapse eventKey="3">
                 <Card.Body>
                   <p style={{ textAlign: "justify" }}>
-                    Ofcourse we do!
-                    We do not need any of your personal details ever!
-                    All our policies will be stored in the blockchain, so it can viewed by anyone.
+                    Ofcourse we do! We do not need any of your personal details
+                    ever! All our policies will be stored in the blockchain, so
+                    it can viewed by anyone.
                   </p>
                 </Card.Body>
               </Accordion.Collapse>

@@ -8,17 +8,18 @@ const Api = {
   },
 
   getPolicy: async policyId => {
-    const url = config[config.app].api.getPolicy.path.replace(
-      "{policyId}",
-      policyId
-    );
+    const url = config.app.api.getPolicy.path.replace("{policyId}", policyId);
 
-    const res = await fetch(url);
-    if (res.status >= 200 && res.status < 300) {
-      return await res.json();
+    try {
+      const res = await fetch(url);
+      if (res.status >= 200 && res.status < 300) {
+        return await res.json();
+      }
+
+      throw new Error(`Policy: ${policyId} not found`);
+    } catch (err) {
+      // Ignore.
     }
-
-    throw new Error(`Policy: ${policyId} not found`);
   }
 };
 
