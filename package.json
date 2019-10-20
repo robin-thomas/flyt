@@ -10,7 +10,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "now-build": "npm run build && mv build dist",
-    "deploy:contract": "node ./scripts/deploy.js truffle && mv build _build"
+    "deploy:contract": "node ./scripts/deploy.js truffle"
   },
   "repository": {
     "type": "git",
@@ -34,13 +34,14 @@
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.10.2",
     "react-scripts": "^3.2.0",
+    "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.2.1"
   },
   "devDependencies": {
+    "eslint-plugin-node": "^10.0.0",
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
-    "prettier": "^1.18.2",
-    "truffle-hdwallet-provider": "^1.0.17"
+    "prettier": "^1.18.2"
   },
   "husky": {
     "hooks": {
@@ -54,7 +55,31 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "eslint:recommended",
+      "plugin:node/recommended",
+      "react-app"
+    ],
+    "rules": {
+      "no-constant-condition": [
+        "off"
+      ],
+      "node/no-missing-require": [
+        "error"
+      ],
+      "node/no-missing-import": [
+        "error"
+      ],
+      "node/no-unpublished-import": [
+        "warn"
+      ],
+      "node/no-unpublished-require": [
+        "warn"
+      ],
+      "node/no-unsupported-features/es-syntax": [
+        "off"
+      ]
+    }
   },
   "browserslist": {
     "production": [

@@ -13,16 +13,12 @@ const Api = {
       policyId
     );
 
-    try {
-      const res = await fetch(url);
-      if (res.status >= 200 && res.status < 300) {
-        return await res.json();
-      }
-
-      throw new Error(`Policy: ${policyId} not found`);
-    } catch (err) {
-      throw err;
+    const res = await fetch(url);
+    if (res.status >= 200 && res.status < 300) {
+      return await res.json();
     }
+
+    throw new Error(`Policy: ${policyId} not found`);
   }
 };
 

@@ -1,9 +1,9 @@
 const Web3 = require("web3");
 const HDWalletProvider = require("truffle-hdwallet-provider");
 
-const keys = require("../../keys.json");
-const config = require("../../config.json");
-const contract = require("../../_build/contracts/Flyt.json");
+const keys = require("../keys.json");
+const config = require("../config.json");
+const contract = require("../../truffle/_build/contracts/Flyt.json");
 
 const Contract = {
   sleep: ms => {
@@ -41,21 +41,17 @@ const Contract = {
   sendSignedTx: async (web3, fn) => {
     const fnABI = fn.encodeABI();
 
-    try {
-      const accounts = await web3.currentProvider.enable();
+    const accounts = await web3.currentProvider.enable();
 
-      return await web3.currentProvider.send("eth_sendTransaction", [
-        {
-          from: accounts[0],
-          to: contract.networks[config.network.network_id].address,
-          data: fnABI,
-          gas: 8000000,
-          gasPrice: web3.utils.toHex(web3.utils.toWei("20", "Gwei"))
-        }
-      ]);
-    } catch (err) {
-      throw err;
-    }
+    return await web3.currentProvider.send("eth_sendTransaction", [
+      {
+        from: accounts[0],
+        to: contract.networks[config.network.network_id].address,
+        data: fnABI,
+        gas: 8000000,
+        gasPrice: web3.utils.toHex(web3.utils.toWei("20", "Gwei"))
+      }
+    ]);
   },
 
   getTx: async txHash => {

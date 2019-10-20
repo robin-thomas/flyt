@@ -2,7 +2,7 @@ const _ = require("lodash");
 const express = require("express");
 
 const Contract = require("./contract");
-const config = require("../../config.json");
+const config = require("../config.json");
 
 const app = express();
 app.use(express.json());

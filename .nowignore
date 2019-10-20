@@ -1,0 +1,6 @@
+dist
+scripts
+truffle/contracts
+truffle/migrations
+truffle-config.json
+LICENSE
