@@ -25,7 +25,8 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
 
     const _policy = {
       policyId: policyId,
-      owner: "dummy", // will be set once the tx is confirmed.
+      owner: "dummy", // will be set once the tx is confirmed.,
+      products: ctx.policyProducts,
       flight: {
         from: ctx.search.from,
         to: ctx.search.to,
@@ -39,7 +40,7 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
   }, [ctx.setPolicy, ctx.flight, ctx.search]);
 
   // TODO: to be set after premium is calculated.
-  const [eth] = useState(0);
+  const [eth] = useState(0.001);
 
   const paymentCheck = async () => {
     // Once payment is completed, webook is triggered,

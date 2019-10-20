@@ -14,6 +14,7 @@ contract Flyt {
     string policyId;
     string owner;
     string txHash;
+    string[] products;
     Flight flight;
   }
 
@@ -48,7 +49,8 @@ contract Flyt {
     } else {
       // Policy doesnt exist.
       // Return a dummy.
-      Policy memory _policy = Policy('0', '', '', Flight('', '', '', '', ''));
+      string[] memory products;
+      Policy memory _policy = Policy('0', '', '', products, Flight('', '', '', '', ''));
       return _policy;
     }
   }
