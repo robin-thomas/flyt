@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const express = require("express");
+const LZUTF8 = require("lzutf8");
 
 const Contract = require("./contract");
 const config = require("../config.json");
@@ -9,7 +10,10 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 app.post(config[config.app].api.callback.path, async (req, res) => {
-  let policy = JSON.parse(decodeURIComponent(req.body.policy));
+  let policy = decodeURIComponent(req.body.policy);
+  policy = LZUTF8.decompress(policy, { inputEncoding: "Base64" });
+  policy = JSON.parse(policy);
+
   policy.txHash = req.body.tx;
 
   // Create the policy with "dummy" owner.

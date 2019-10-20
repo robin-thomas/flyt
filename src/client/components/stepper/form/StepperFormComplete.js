@@ -46,12 +46,10 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
       // existance of which verifies payment is done
       // (payment could fail though).
 
-      const decodedPolicy = JSON.parse(decodeURIComponent(ctx.policy));
-
       while (true) {
         try {
-          const _policy = await Api.getPolicy(decodedPolicy.policyId);
-          if (_policy && _policy.policyId === decodedPolicy.policyId) {
+          const _policy = await Api.getPolicy(ctx.policy.policyId);
+          if (_policy && _policy.policyId === ctx.policy.policyId) {
             break;
           }
         } catch (err) {

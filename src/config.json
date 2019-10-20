@@ -29,6 +29,7 @@
   },
   "kyber": {
     "receiveETHAddress": "0x4247ACebDA3f79B15E2E29dfbDb36D0BD1AccA86",
-    "callback": "https://flyt.robinthomas2591.now.sh/callback"
+    "callback": "https://flyt.robinthomas2591.now.sh/callback",
+    "pay": "https://widget.kyber.network/v0.7.2/?type=pay&mode=popup&lang=en&receiveAddr={ethAddress}&receiveToken=ETH&receiveAmount={eth}&callback={callback}&paramForwarding=true&network={network}&policy={policy}&theme=theme-dark"
   }
 }

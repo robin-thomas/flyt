@@ -10,14 +10,14 @@ const getForm = (index, props) => {
     case 3:
       return <StepperFormComplete {...props} />;
 
-    case 2:
+    case 0:
       return <StepperFormPayment {...props} />;
 
     case 1:
       return <StepperFormFlight {...props} />;
 
     default:
-    case 0:
+    case 2:
       return <StepperFormTravel {...props} />;
   }
 };
