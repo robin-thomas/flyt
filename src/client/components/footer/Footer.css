@@ -13,3 +13,11 @@
   text-transform: uppercase;
   letter-spacing: 2px;
 }
+
+.footer-container .modal-content {
+  border-radius: 0.3rem !important;
+}
+
+.footer-container .modal-content table tr > td:first-child {
+  font-weight: 400;
+}

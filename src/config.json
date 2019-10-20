@@ -3,7 +3,8 @@
     "server": "https://flyt.robinthomas2591.now.sh",
     "network": {
       "name": "ropsten",
-      "network_id": "3"
+      "network_id": "3",
+      "explorer": "https://ropsten.etherscan.io/tx/{txHash}"
     },
     "api": {
       "getPolicy": {
