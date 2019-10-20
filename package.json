@@ -9,7 +9,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "now-build": "npm run build && mv build dist"
+    "now-build": "npm run build && mv build dist",
+    "deploy:contract": "node ./scripts/deploy.js truffle && mv build _build"
   },
   "repository": {
     "type": "git",

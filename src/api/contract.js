@@ -11,7 +11,10 @@ const Contract = {
   },
 
   getWeb3Provider: () => {
-    return new HDWalletProvider(keys.metamask.mnemonic, keys.infura.ropsten);
+    return new HDWalletProvider(
+      keys.metamask.mnemonic,
+      keys.infura.ropsten.api
+    );
   },
 
   getContract: async provider => {
