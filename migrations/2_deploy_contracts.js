@@ -1,5 +1,5 @@
-const Flight = artifacts.require("Flight");
+const Flyt = artifacts.require("Flyt");
 
 module.exports = function(deployer) {
-  deployer.deploy(Flight);
+  deployer.deploy(Flyt);
 };
