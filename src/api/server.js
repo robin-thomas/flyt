@@ -24,6 +24,7 @@ app.post(config.app.api.callback.path, async (req, res) => {
   policy = JSON.parse(policy);
 
   policy.txHash = req.body.tx;
+  policy.paid = false;
 
   // Send the response back as kyber callback has a 10s timeout.
   res.status(200).send();
@@ -37,9 +38,12 @@ app.post(config.app.api.callback.path, async (req, res) => {
     // Create the policy with "dummy" owner.
     await Contract.invokeFn("createNewPolicy", false /* isPure */, policy);
 
-    // Overwrite the policy with real owner.
+    // Overwrite the policy with real owner
+    // if the transaction has passed.
     const tx = await Contract.getTx(policy.txHash);
     policy.owner = tx.from;
+    policy.paid = true;
+
     await Contract.invokeFn("createNewPolicy", false /* isPure */, policy);
   } catch (err) {
     console.error(err);

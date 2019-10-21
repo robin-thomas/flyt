@@ -11,6 +11,7 @@ contract Flyt {
   }
 
   struct Policy {
+    bool paid;
     string policyId;
     string owner;
     string txHash;
@@ -50,7 +51,7 @@ contract Flyt {
       // Policy doesnt exist.
       // Return a dummy.
       string[] memory products;
-      Policy memory _policy = Policy('0', '', '', products, Flight('', '', '', '', ''));
+      Policy memory _policy = Policy(false, '0', '', '', products, Flight('', '', '', '', ''));
       return _policy;
     }
   }

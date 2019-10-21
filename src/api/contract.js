@@ -73,8 +73,12 @@ const Contract = {
       await Contract.sleep(1000 /* 1s */);
     }
 
-    // Return tx details.
-    return await _web3.eth.getTransaction(txHash);
+    if (receipt.status === 1) {
+      // Return tx details.
+      return await _web3.eth.getTransaction(txHash);
+    }
+
+    throw new Error(`Transaction ${txHash} has failed`);
   }
 };
 

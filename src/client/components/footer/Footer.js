@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";
 import {
   MDBInput,
@@ -10,7 +11,7 @@ import {
   MDBTable,
   MDBTableBody
 } from "mdbreact";
-import { Container, Row, Col } from "react-bootstrap";
+import { Badge, Container, Row, Col } from "react-bootstrap";
 
 import Api from "../utils/Api";
 
@@ -22,8 +23,11 @@ const Footer = props => {
   const [open, setOpen] = useState(false);
   const [policyId, setPolicyId] = useState("");
   const [policy, setPolicy] = useState({});
+  const [disabled, setDisabled] = useState(false);
 
   const search = async () => {
+    setDisabled(true);
+
     const policy = await Api.getPolicy(policyId);
     if (policy && policy.owner !== "dummy") {
       setPolicy(policy);
@@ -32,7 +36,11 @@ const Footer = props => {
     } else {
       alert("Policy not found!");
     }
+
+    setDisabled(false);
   };
+
+  const pay = async () => {};
 
   return (
     <Container className="footer-container">
@@ -49,6 +57,7 @@ const Footer = props => {
               <MDBInput
                 value={policyId}
                 label="Policy ID"
+                disabled={disabled}
                 onChange={e => setPolicyId(e.target.value)}
               />
             </Col>
@@ -58,6 +67,7 @@ const Footer = props => {
                 color="mdb-color"
                 style={{ marginTop: "-10px", marginRight: "0px" }}
                 onClick={search}
+                disabled={disabled}
               >
                 Search
               </MDBBtn>
@@ -100,38 +110,51 @@ const Footer = props => {
                 <td>Departure Time:</td>
                 <td>
                   {policy.flight
-                    ? parseISO(policy.flight.departureTime).toLocaleString()
+                    ? format(parseISO(policy.flight.departureTime), "PPpp")
                     : ""}
                 </td>
               </tr>
               <tr>
-                <td>Transaction:</td>
+                <td>Payment:</td>
                 <td>
-                  {policy.txHash ? (
-                    <MDBBtn
-                      style={{ margin: "0px" }}
-                      color="mdb-color"
-                      outline
-                      size="sm"
-                    >
+                  {policy.paid === true ? (
+                    <Badge variant="success">
                       <a
                         target="_blank"
                         rel="noopener noreferrer"
+                        style={{ color: "white" }}
                         href={config.app.network.explorer.replace(
                           "{txHash}",
                           policy.txHash
                         )}
                       >
-                        Explorer
+                        Success
                       </a>
-                    </MDBBtn>
+                    </Badge>
                   ) : (
-                    ""
+                    <Badge variant="danger">
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "white" }}
+                        href={config.app.network.explorer.replace(
+                          "{txHash}",
+                          policy.txHash
+                        )}
+                      >
+                        Failed
+                      </a>
+                    </Badge>
                   )}
                 </td>
               </tr>
             </MDBTableBody>
           </MDBTable>
+          {policy.paid !== true ? (
+            <MDBBtn color="mdb-color" style={{ margin: "0px" }} onClick={pay}>
+              Pay
+            </MDBBtn>
+          ) : null}
         </MDBModalBody>
       </MDBModal>
     </Container>
