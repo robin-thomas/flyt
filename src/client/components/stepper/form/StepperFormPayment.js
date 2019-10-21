@@ -1,20 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 
-import LZUTF8 from "lzutf8";
-import { MDBBtn } from "mdbreact";
-
-import Api from "../../utils/Api";
+import Kyber from "../../utils/Kyber";
 import { DataContext } from "../../utils/DataProvider";
 import EmptyRow from "../../utils/EmptyRow";
 
-import config from "../../../../config.json";
-
 const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
-  // Constant values.
-  const ethAddress = config.kyber.receiveETHAddress;
-  const callback = encodeURIComponent(config.kyber.callback);
-  const network = config.app.network.name;
-
   const ctx = useContext(DataContext);
 
   useEffect(() => {
@@ -43,56 +33,6 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
   // TODO: to be set after premium is calculated.
   const [eth] = useState(0.001);
 
-  const paymentCheck = async () => {
-    let _policy = JSON.stringify(ctx.policy);
-    _policy = LZUTF8.compress(_policy, { outputEncoding: "Base64" });
-    _policy = encodeURIComponent(_policy);
-
-    const url = config.kyber.pay
-      .replace("{ethAddress}", ethAddress)
-      .replace("{callback}", callback)
-      .replace("{network}", network)
-      .replace("{eth}", eth)
-      .replace("{policy}", _policy);
-
-    const kyberClass = ["kyber-widget-button", "theme-dark", "theme-supported"];
-
-    const ele = document.createElement("a");
-    ele.href = url;
-    ele.classList.add(...kyberClass);
-
-    document.body.appendChild(ele);
-
-    window.kyberWidgetOptions.register();
-
-    ele.click();
-
-    document.body.removeChild(ele);
-
-    // Once payment is completed, webhook is triggered,
-    // which creates a dummy owner policy,
-    // existance of which verifies payment is done
-    // (payment could fail though).
-
-    console.log(`Policy ID: ${ctx.policy.policyId}`);
-
-    while (true) {
-      try {
-        const _policy = await Api.getPolicy(ctx.policy.policyId);
-        if (_policy && _policy.policyId === ctx.policy.policyId) {
-          break;
-        }
-      } catch (err) {
-        // Policy doesnt exist.
-      }
-
-      await Api.sleep(1000 /* 1s */);
-    }
-
-    // Policy exists at this point.
-    setIndex(index => index + 1);
-  };
-
   return (
     <div>
       <h4>Payment</h4>
@@ -100,15 +40,12 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
         * insurance premium is calculated based on the risk
       </p>
       <EmptyRow height="60px" />
-      <MDBBtn
-        color="mdb-color"
-        className="btn-rounded"
-        style={{ margin: "0" }}
+      <Kyber
+        eth={eth}
         disabled={eth === 0}
-        onClick={paymentCheck}
-      >
-        Pay
-      </MDBBtn>
+        cls="btn-rounded"
+        cb={() => setIndex(index => index + 1)}
+      />
     </div>
   );
 };

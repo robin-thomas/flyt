@@ -1,16 +1,17 @@
 const Utils = {
   mapPolicyToObject: policy => {
     return {
-      policyId: policy[0],
-      owner: policy[1],
-      txHash: policy[2],
-      products: policy[3],
+      paid: policy[0],
+      policyId: policy[1],
+      owner: policy[2],
+      txHash: policy[3],
+      products: policy[4],
       flight: {
-        from: policy[4][0],
-        to: policy[4][1],
-        code: policy[4][2],
-        name: policy[4][3],
-        departureTime: policy[4][4]
+        from: policy[5][0],
+        to: policy[5][1],
+        code: policy[5][2],
+        name: policy[5][3],
+        departureTime: policy[5][4]
       }
     };
   }

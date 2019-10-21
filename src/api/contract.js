@@ -30,32 +30,40 @@ const Contract = {
     const _web3 = new Web3(_provider);
     const _contract = Contract.getContract(_provider);
 
-    const _fn = _contract.methods[fnName](...args);
-    if (isPure) {
-      const accounts = await _web3.eth.getAccounts();
+    try {
+      const _fn = _contract.methods[fnName](...args);
+      if (isPure) {
+        const accounts = await _web3.eth.getAccounts();
 
-      // Need to set "from" because we are using "msg.sender" in the contract.
-      return await _fn.call({
-        from: accounts[0]
-      });
-    } else {
-      await Contract.sendSignedTx(_web3, _fn);
+        // Need to set "from" because we are using "msg.sender" in the contract.
+        return await _fn.call({
+          from: accounts[0]
+        });
+      } else {
+        return await Contract.sendSignedTx(_web3, _fn);
+      }
+    } catch (err) {
+      throw err;
     }
   },
 
   sendSignedTx: async (web3, fn) => {
-    const accounts = await web3.eth.getAccounts();
+    try {
+      const accounts = await web3.eth.getAccounts();
 
-    const tx = {
-      from: accounts[0],
-      to: contract.networks[config.app.network.network_id].address,
-      data: fn.encodeABI(),
-      gas: 8000000,
-      gasPrice: web3.utils.toHex(web3.utils.toWei("20", "Gwei"))
-    };
+      const tx = {
+        from: accounts[0],
+        to: contract.networks[config.app.network.network_id].address,
+        data: fn.encodeABI(),
+        gas: 8000000,
+        gasPrice: web3.utils.toHex(web3.utils.toWei("20", "Gwei"))
+      };
 
-    const signedTx = await web3.eth.signTransaction(tx, tx.from);
-    return await web3.eth.sendSignedTransaction(signedTx.raw);
+      const signedTx = await web3.eth.signTransaction(tx, tx.from);
+      return await web3.eth.sendSignedTransaction(signedTx.raw);
+    } catch (err) {
+      throw err;
+    }
   },
 
   getTx: async txHash => {
@@ -73,12 +81,16 @@ const Contract = {
       await Contract.sleep(1000 /* 1s */);
     }
 
-    if (receipt.status === 1) {
-      // Return tx details.
-      return await _web3.eth.getTransaction(txHash);
-    }
+    try {
+      if (receipt.status === true) {
+        // Return tx details.
+        return await _web3.eth.getTransaction(txHash);
+      }
 
-    throw new Error(`Transaction ${txHash} has failed`);
+      throw new Error(`Transaction ${txHash} has failed`);
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
 

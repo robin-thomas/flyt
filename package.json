@@ -68,6 +68,9 @@
       "no-constant-condition": [
         "off"
       ],
+      "no-useless-catch": [
+        "off"
+      ],
       "node/no-missing-require": [
         "error"
       ],

@@ -13,6 +13,7 @@ import {
 } from "mdbreact";
 import { Badge, Container, Row, Col } from "react-bootstrap";
 
+import Kyber from "../utils/Kyber";
 import Api from "../utils/Api";
 
 import config from "../../../config.json";
@@ -39,8 +40,6 @@ const Footer = props => {
 
     setDisabled(false);
   };
-
-  const pay = async () => {};
 
   return (
     <Container className="footer-container">
@@ -150,11 +149,7 @@ const Footer = props => {
               </tr>
             </MDBTableBody>
           </MDBTable>
-          {policy.paid !== true ? (
-            <MDBBtn color="mdb-color" style={{ margin: "0px" }} onClick={pay}>
-              Pay
-            </MDBBtn>
-          ) : null}
+          {policy.paid !== true ? <Kyber eth={0.001} cb={console.log} /> : null}
         </MDBModalBody>
       </MDBModal>
     </Container>
