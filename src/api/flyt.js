@@ -157,10 +157,11 @@ const Flyt = {
   },
 
   pay: async (policyId, payment) => {
-    // Pay the policy owner.
+    // Convert eth to wei.
     const wei = Contract.getWeb3().utils.toWei(payment, "ether"); // 1000000000000000000 wei
 
-    await Contract.invokeFn("payPolicy", false /* isPure */, wei);
+    // Pay the policy owner.
+    await Contract.invokeFn("payPolicy", false /* isPure */, policyId, wei);
   }
 };
 

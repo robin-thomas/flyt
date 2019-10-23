@@ -8,12 +8,13 @@ contract Flyt {
     string code;
     string name;
     string departureTime;
+    string arrivalTime;
   }
 
   struct Policy {
     bool paid;
     string policyId;
-    string owner;
+    address payable owner;
     string txHash;
     string[] products;
     Flight flight;
@@ -24,9 +25,15 @@ contract Flyt {
     bool hasWeather;
   }
 
+  struct Payment {
+    bool paid;
+    uint256 amount;
+  }
+
   mapping(string => bool) isPolicy;
   mapping(string => Policy) policies;
   mapping(string => Premium) premiums;
+  mapping(string => Payment) payments;
 
   address owner = msg.sender; // set the owner of the contract.
 
@@ -51,7 +58,7 @@ contract Flyt {
       // Policy doesnt exist.
       // Return a dummy.
       string[] memory products;
-      Policy memory _policy = Policy(false, '0', '', '', products, Flight('', '', '', '', ''));
+      Policy memory _policy = Policy(false, '0', address(0), '', products, Flight('', '', '', '', '', ''));
       return _policy;
     }
   }
@@ -65,6 +72,17 @@ contract Flyt {
     // Send the chainlink requests to various oracles if not sent.
 
     return _premium;
+  }
+
+  function payPolicy(string memory _policyId, uint256 amount) public _ownerOnly {
+    require(isPolicy[_policyId] == true);
+    require(policies[_policyId].owner != address(0));
+    require(payments[_policyId].paid == false);
+
+    policies[_policyId].owner.transfer(amount);
+
+    payments[_policyId].paid = true;
+    payments[_policyId].amount = amount;
   }
 
 }
