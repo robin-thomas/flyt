@@ -1,13 +1,15 @@
 const _ = require("lodash");
 const express = require("express");
 const LZUTF8 = require("lzutf8");
-const Keyv = require("keyv");
+const parseISO = require("date-fns/parseISO");
+const format = require("date-fns/format");
 
 const Utils = require("./utils");
 const Contract = require("./contract");
-const config = require("../config.json");
+const Scheduler = require("./scheduler");
+const Cache = require("./cache");
 
-const keyv = new Keyv();
+const config = require("../config.json");
 
 const app = express();
 app.use(express.json());
@@ -25,6 +27,7 @@ app.post(config.app.api.callback.path, async (req, res) => {
 
   policy.txHash = req.body.tx;
   policy.paid = false;
+  policy.owner = "0x0000000000000000000000000000000000000000";
 
   // Send the response back as kyber callback has a 10s timeout.
   res.status(200).send();
@@ -33,7 +36,12 @@ app.post(config.app.api.callback.path, async (req, res) => {
     // Add it to key-value store.
     // We are doing this so that our frontend can immediately detect callback
     // has reached the backend.
-    await keyv.set(policy.policyId, policy, 5 * 60 * 1000 /* 5 minutes TTL */);
+    await Cache.set(
+      policy.policyId,
+      policy,
+      "policy",
+      5 * 60 * 1000 /* 5 minutes TTL */
+    );
 
     // Create the policy with "dummy" owner.
     await Contract.invokeFn("createNewPolicy", false /* isPure */, policy);
@@ -45,6 +53,22 @@ app.post(config.app.api.callback.path, async (req, res) => {
     policy.paid = true;
 
     await Contract.invokeFn("createNewPolicy", false /* isPure */, policy);
+
+    // Set up the scheduler keys.
+    const schedulerKey = format(
+      parseISO(policy.flight.arrivalDate),
+      "yyyy-MM-dd"
+    );
+    const schedulerValue = await Cache.get(schedulerKey, "payment");
+    if (schedulerValue === undefined) {
+      await Cache.set(schedulerKey, [policy.policyId], "payment");
+    } else {
+      await Cache.set(
+        schedulerKey,
+        [...schedulerValue, policy.policyId],
+        "payment"
+      );
+    }
   } catch (err) {
     console.error(err);
   }
@@ -53,7 +77,7 @@ app.post(config.app.api.callback.path, async (req, res) => {
 app.get(getPolicyUrl, async (req, res) => {
   const policyId = req.params.policyId;
 
-  let policy = await keyv.get(policyId);
+  let policy = await Cache.get(policyId, "policy");
   if (policy !== undefined) {
     res.status(200).send(policy);
   } else {
@@ -69,4 +93,8 @@ app.get(getPolicyUrl, async (req, res) => {
 });
 
 const port = !_.isUndefined(process.env.PORT) ? process.env.PORT : 4000;
-app.listen(port, () => console.log(`app listening on ${port}`));
+app.listen(port, () => {
+  console.log(`app listening on ${port}`);
+
+  Scheduler.scheduleJob();
+});

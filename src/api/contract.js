@@ -17,8 +17,17 @@ const Contract = {
     );
   },
 
+  getWeb3: (provider = null) => {
+    if (provider === null) {
+      provider = Contract.getWeb3Provider();
+    }
+
+    return new Web3(provider);
+  },
+
   getContract: provider => {
-    const web3 = new Web3(provider);
+    const web3 = Contract.getWeb3(provider);
+
     return new web3.eth.Contract(
       contract.abi,
       contract.networks[config.app.network.network_id].address
@@ -27,7 +36,7 @@ const Contract = {
 
   invokeFn: async (fnName, isPure, ...args) => {
     const _provider = Contract.getWeb3Provider();
-    const _web3 = new Web3(_provider);
+    const _web3 = Contract.getWeb3(_provider);
     const _contract = Contract.getContract(_provider);
 
     try {
@@ -68,7 +77,7 @@ const Contract = {
 
   getTx: async txHash => {
     const _provider = await Contract.getWeb3Provider();
-    const _web3 = new Web3(_provider);
+    const _web3 = Contract.getWeb3(_provider);
 
     // Wait till the transaction is mined.
     let receipt = null;

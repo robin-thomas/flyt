@@ -11,7 +11,8 @@ const Utils = {
         to: policy[5][1],
         code: policy[5][2],
         name: policy[5][3],
-        departureTime: policy[5][4]
+        departureTime: policy[5][4],
+        arrivalTime: policy[5][5]
       }
     };
   }
