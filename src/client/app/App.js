@@ -1,12 +1,24 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import getComponent from "../components/utils/Component";
-import { DataContext } from "../components/utils/DataProvider";
+import { Container } from "react-bootstrap";
 
-function App() {
-  const ctx = useContext(DataContext);
+import Header from "../components/header";
+import Footer from "../components/footer";
+import Stepper from "../components/stepper";
+import EmptyRow from "../components/utils/EmptyRow";
 
-  return <div className="App">{getComponent(ctx.page)}</div>;
-}
+const App = () => (
+  <div className="App">
+    <Header />
+    <div className="stepper-form-container">
+      <Container>
+        <EmptyRow height="50px" />
+        <Stepper />
+        <EmptyRow height="165px" />
+      </Container>
+    </div>
+    <Footer />
+  </div>
+);
 
 export default App;

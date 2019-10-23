@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.5.1",
+    "@react-pdf/renderer": "^1.6.7",
     "@truffle/hdwallet-provider": "1.0.22",
     "bootstrap": "^4.3.1",
     "chainlink": "^0.7.5",
@@ -44,6 +45,7 @@
     "web3": "^1.2.1"
   },
   "devDependencies": {
+    "eslint-config-react-app": "^5.0.2",
     "eslint-plugin-node": "^10.0.0",
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",

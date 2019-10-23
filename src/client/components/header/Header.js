@@ -2,13 +2,27 @@ import React, { useContext } from "react";
 
 import { MDBIcon, MDBModal, MDBModalBody, MDBModalHeader } from "mdbreact";
 import { Accordion, Card, Container, Row, Col, Button } from "react-bootstrap";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
+import PolicyPdf from "../PolicyPdf";
 import { DataContext } from "../utils/DataProvider";
+
+import config from "../../../config.json";
 
 import "./Header.css";
 
 const Header = props => {
   const ctx = useContext(DataContext);
+
+  const policy = {
+    policyId: "12345",
+    flight: {
+      from: "Singapore Airport",
+      to: "Cochin Airport",
+      departureDate: "2019-10-22T00:00:00.000",
+      arrivalDate: "2019-10-22T00:00:00.000"
+    }
+  };
 
   return (
     <Row className="header">
@@ -17,7 +31,24 @@ const Header = props => {
           <Row style={{ height: "100%" }}>
             <Col md="auto" className="align-self-center title">
               <MDBIcon icon="helicopter" />
-              &nbsp; Flyt
+              &nbsp; {config.app.name}
+            </Col>
+            <Col md="auto" className="ml-auto align-self-center title">
+              <PDFDownloadLink
+                document={<PolicyPdf policy={policy} />}
+                fileName={`policy-${policy.policyId}.pdf`}
+                style={{
+                  textDecoration: "none",
+                  padding: "10px",
+                  color: "#4a4a4a",
+                  backgroundColor: "#f2f2f2",
+                  border: "1px solid #4a4a4a"
+                }}
+              >
+                {({ blob, url, loading, error }) =>
+                  loading ? "Loading document..." : "Download Pdf"
+                }
+              </PDFDownloadLink>
             </Col>
             <Col md="auto" className="ml-auto align-self-center title">
               <span
