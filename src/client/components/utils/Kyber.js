@@ -6,11 +6,12 @@ import { MDBBtn } from "mdbreact";
 import Api from "./Api";
 import { DataContext } from "./DataProvider";
 
+import contract from "../../../truffle/_build/contracts/Flyt.json";
 import config from "../../../config.json";
 
 const Kyber = ({ cls, disabled, eth, cb }) => {
   // Constant values.
-  const ethAddress = config.kyber.receiveETHAddress;
+  const ethAddress = contract.networks[config.app.network.network_id].address;
   const callback = encodeURIComponent(config.kyber.callback);
   const network = config.app.network.name;
 

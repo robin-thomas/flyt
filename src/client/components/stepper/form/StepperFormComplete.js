@@ -47,7 +47,10 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
       while (true) {
         try {
           const _policy = await Api.getPolicy(ctx.policy.policyId);
-          if (_policy && _policy.owner !== "dummy") {
+          if (
+            _policy &&
+            _policy.owner !== "0x0000000000000000000000000000000000000000"
+          ) {
             break;
           }
         } catch (err) {

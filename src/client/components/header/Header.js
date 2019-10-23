@@ -50,8 +50,9 @@ const Header = props => {
                   <p style={{ textAlign: "justify" }}>
                     We have no concept of <b>insurance claims</b> thanks to our
                     blockchain technology. Every eligible policies will be paid
-                    out instantly. Never do you have to worry about flight
-                    insurance again!
+                    out with 24 hours of the scheduled arrival time of their
+                    flight. Never do you have to worry about flight insurance
+                    again!
                   </p>
                 </Card.Body>
               </Accordion.Collapse>
@@ -67,10 +68,10 @@ const Header = props => {
               <Accordion.Collapse eventKey="1">
                 <Card.Body>
                   <p style={{ textAlign: "justify" }}>
-                    All you have to do is to buy a policy. Our smart contracts
-                    will be continuously monitoring the flight details and
-                    calculate the payout accordingly. Nothing for you to do
-                    other than buying a policy!
+                    All you have to do is to buy a policy. Our technology will
+                    be continuously monitoring the flight details and calculate
+                    the payout accordingly. Nothing for you to do other than
+                    buying a policy!
                   </p>
                 </Card.Body>
               </Accordion.Collapse>

@@ -16,14 +16,15 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
 
     const _policy = {
       policyId: policyId,
-      owner: "dummy", // will be set once the tx is confirmed.,
+      owner: "0x0000000000000000000000000000000000000000", // will be set once the tx is confirmed.,
       products: ctx.policyProducts,
       flight: {
         from: ctx.search.from,
         to: ctx.search.to,
         code: ctx.flight.code,
         name: ctx.flight.name,
-        departureTime: ctx.flight.departureTime
+        departureTime: ctx.flight.departureTime,
+        arrivalTime: ctx.flight.arrivalTime
       }
     };
 

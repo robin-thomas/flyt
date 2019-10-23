@@ -40,6 +40,7 @@ const StepperFormTravel = ({ setNextDisabled }) => {
               code: result.code,
               name: result.name,
               departureTime: result.departureTime,
+              arrivalTime: result.arrivalTime,
               displayName: `${result.name} (${result.code}) Dep: ${format(
                 departureTime,
                 "hh:mm aaa"

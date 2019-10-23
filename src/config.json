@@ -20,15 +20,24 @@
       "Flight Departure Delay",
       "Flight Arrival Delay",
       "Flight Cancellation"
-    ]
+    ],
+    "payment": {
+      "delay": {
+        "15": 0.001,
+        "30": 0.002,
+        "60": 0.003,
+        "120": 0.004
+      },
+      "cancelled": 1
+    }
   },
   "flightstats": {
     "api": {
-      "getFlightsByRoute": "https://flightstats-api.herokuapp.com/flex/schedules/rest/v1/json/from/{from}/to/{to}/departing/{date}?appId={appId}&appKey={appKey}"
+      "getFlightsByRoute": "https://flightstats-api.herokuapp.com/flex/schedules/rest/v1/json/from/{from}/to/{to}/departing/{date}?appId={appId}&appKey={appKey}",
+      "getFlightStatsByRoute": "https://flightstats-api.herokuapp.com/flex/flightstatus/rest/v2/json/route/status/{from}/{to}/dep/{year}/{month}/{day}?appId={appId}&appKey={appKey}&hourOfDay={hourOfDay}&utc=true&numHours=24&maxFlights=5"
     }
   },
   "kyber": {
-    "receiveETHAddress": "0x4247ACebDA3f79B15E2E29dfbDb36D0BD1AccA86",
     "callback": "https://flyt.robinthomas2591.now.sh/callback",
     "pay": "https://widget.kyber.network/v0.7.2/?type=pay&mode=popup&lang=en&receiveAddr={ethAddress}&receiveToken=ETH&receiveAmount={eth}&callback={callback}&paramForwarding=true&network={network}&policy={policy}&theme=theme-dark"
   }
