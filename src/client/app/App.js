@@ -17,13 +17,12 @@ const policy = {
     departureDate: "2019-10-22T00:00:00.000",
     arrivalDate: "2019-10-22T00:00:00.000",
     name: "MI",
-    code: "468",
-  },
+    code: "468"
+  }
 };
 
 const App = () => (
   <div className="App">
-    <PolicyPdf policy={policy}/>
     <Header />
     <div className="stepper-form-container">
       <Container>
