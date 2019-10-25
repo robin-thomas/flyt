@@ -1,5 +1,6 @@
 import React from "react";
 
+import { MDBBtn } from "mdbreact";
 import { Spinner } from "react-bootstrap";
 
 import {
@@ -14,14 +15,21 @@ import {
 
 import config from "../../config.json";
 
-Font.register({ family: "Roboto", fonts: [
-  { src: "http://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf" },
-  { src: "http://fonts.gstatic.com/s/robotocondensed/v14/Zd2E9abXLFGSr9G3YK2MsDR-eWpsHSw83BRsAQElGgc.ttf", fontWeight: 900 },
-]});
+Font.register({
+  family: "Roboto",
+  fonts: [
+    { src: "http://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf" },
+    {
+      src:
+        "http://fonts.gstatic.com/s/robotocondensed/v14/Zd2E9abXLFGSr9G3YK2MsDR-eWpsHSw83BRsAQElGgc.ttf",
+      fontWeight: 900
+    }
+  ]
+});
 
 const styles = StyleSheet.create({
   page: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto"
   },
   header: {
     padding: "10% 0",
@@ -31,25 +39,25 @@ const styles = StyleSheet.create({
   },
   container: {
     fontSize: 12,
-    padding: "0% 10%",
+    padding: "0% 10%"
   },
   policyContainer: {
-    padding: "10% 0",
+    padding: "10% 0"
   },
   policy: {
     padding: "1%",
     display: "flex",
     flexDirection: "row",
-    alignItems: "stretch",
+    alignItems: "stretch"
   },
   policyHeader: {
     fontWeight: 900,
     width: "40%",
-    textAlign: "left",
+    textAlign: "left"
   },
   policyBody: {
     width: "60%",
-    textAlign: "left",
+    textAlign: "left"
   }
 });
 
@@ -62,14 +70,16 @@ const Policy = ({ policy }) => (
       <View style={styles.container}>
         <Text>
           This policy is issued as a matter of information only and confers no
-          rights upon the certificate holder. This certificate does not amend, extend
-          or alter the coverage afforded by the policy detailed below, or assume
-          continuity of the policy.
+          rights upon the certificate holder. This certificate does not amend,
+          extend or alter the coverage afforded by the policy detailed below, or
+          assume continuity of the policy.
         </Text>
         <View style={styles.policyContainer}>
           <View style={styles.policy}>
             <Text style={styles.policyHeader}>Insured by:</Text>
-            <Text style={styles.policyBody}>{config.app.name.toUpperCase()}</Text>
+            <Text style={styles.policyBody}>
+              {config.app.name.toUpperCase()}
+            </Text>
           </View>
           <View style={styles.policy}>
             <Text style={styles.policyHeader}>Policy Type:</Text>
@@ -82,7 +92,8 @@ const Policy = ({ policy }) => (
           <View style={styles.policy}>
             <Text style={styles.policyHeader}>Flight:</Text>
             <Text style={styles.policyBody}>
-              {policy.flight.name} {policy.flight.code} from {policy.flight.from} ({policy.flight.departureDate})
+              {policy.flight.name} {policy.flight.code} from{" "}
+              {policy.flight.from} ({policy.flight.departureDate})
             </Text>
           </View>
           <View style={styles.policy}>
@@ -90,19 +101,30 @@ const Policy = ({ policy }) => (
             <Text style={styles.policyBody}>{policy.products.join(" ,")}</Text>
           </View>
         </View>
-        <Text>
-          Subject to the Terms and Conditions of this Policy.
-        </Text>
+        <Text>Subject to the Terms and Conditions of this Policy.</Text>
       </View>
     </Page>
   </Document>
 );
 
 const PolicyPdf = ({ policy }) => (
-  <PDFDownloadLink document={<Policy policy={policy}/>} fileName={`policy-${policy.policyId}.pdf`}>
-    {({ loading }) => loading ? (
-      <Spinner animation="border" size="sm" role="status" />
-    ) : 'Download'}
+  <PDFDownloadLink
+    document={<Policy policy={policy} />}
+    fileName={`policy-${policy.policyId}.pdf`}
+  >
+    {({ loading }) =>
+      loading ? (
+        <Spinner animation="border" size="sm" role="status" />
+      ) : (
+        <MDBBtn
+          color="mdb-color"
+          className="btn-rounded"
+          style={{ margin: "0" }}
+        >
+          Download
+        </MDBBtn>
+      )
+    }
   </PDFDownloadLink>
 );
 
