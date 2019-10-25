@@ -13,6 +13,8 @@ import {
 } from "mdbreact";
 import { Badge, Container, Row, Col } from "react-bootstrap";
 
+import PolicyPdf from "../PolicyPdf";
+
 import Kyber from "../utils/Kyber";
 import Api from "../utils/Api";
 
@@ -30,7 +32,10 @@ const Footer = props => {
     setDisabled(true);
 
     const policy = await Api.getPolicy(policyId);
-    if (policy && policy.owner !== "dummy") {
+    if (
+      policy &&
+      policy.owner !== "0x0000000000000000000000000000000000000000"
+    ) {
       setPolicy(policy);
       setOpen(true);
       setPolicyId("");
@@ -149,7 +154,11 @@ const Footer = props => {
               </tr>
             </MDBTableBody>
           </MDBTable>
-          {policy.paid !== true ? <Kyber eth={0.001} cb={console.log} /> : null}
+          {policy.paid !== true ? (
+            <Kyber eth={0.001} cb={console.log} />
+          ) : (
+            <PolicyPdf policy={policy} />
+          )}
         </MDBModalBody>
       </MDBModal>
     </Container>
