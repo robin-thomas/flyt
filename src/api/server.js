@@ -1,9 +1,13 @@
-const _ = require("lodash");
 const express = require("express");
+
+const _ = require("lodash");
 const LZUTF8 = require("lzutf8");
+
 const parseISO = require("date-fns/parseISO");
 const format = require("date-fns/format");
+const parse = require("date-fns/parse");
 
+const Flyt = require("./flyt");
 const Utils = require("./utils");
 const Contract = require("./contract");
 const Scheduler = require("./scheduler");
@@ -90,6 +94,36 @@ app.get(getPolicyUrl, async (req, res) => {
       res.status(200).send(Utils.mapPolicyToObject(policy));
     }
   }
+});
+
+app.get(config.app.api.getFlightsByRoute.path, async (req, res) => {
+  const from = req.query.from;
+  const to = req.query.to;
+  const date = req.query.date;
+
+  const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+
+  const results = await Flyt.getFlightsByRoute(from, to, parsedDate);
+
+  res.status(200).send(results);
+});
+
+app.get(config.app.api.getFlightStats.path, async (req, res) => {
+  const from = req.query.from;
+  const carrier = req.query.name.split(" ")[0];
+  const flightCode = req.query.name.split(" ")[1];
+
+  const results = await Flyt.getFlightStats(carrier, flightCode, from);
+
+  res.status(200).send(results);
+});
+
+app.get(config.app.api.getDelayByAirports.path, async (req, res) => {
+  const airports = req.query.airports;
+
+  const results = await Flyt.getDelayByAirports(airports.split(","));
+
+  res.status(200).send(results);
 });
 
 const port = !_.isUndefined(process.env.PORT) ? process.env.PORT : 4000;

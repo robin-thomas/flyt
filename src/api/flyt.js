@@ -10,6 +10,7 @@ const Cache = require("./cache");
 const config = require("../config.json");
 const keys = require("../keys.json");
 const airports = require("../client/airports.json");
+const airlines = require("../client/airlines.json");
 
 const Flyt = {
   toIata: name => {
@@ -162,6 +163,81 @@ const Flyt = {
 
     // Pay the policy owner.
     await Contract.invokeFn("payPolicy", false /* isPure */, policyId, wei);
+  },
+
+  getFlightsByRoute: async (fromIata, toIata, date) => {
+    const url = config.flightstats.api.getFlightsByRoute
+      .replace("{from}", fromIata)
+      .replace("{to}", toIata)
+      .replace("{date}", format(date, "yyyy/MM/dd"))
+      .replace("{appId}", keys.flightstats.appId)
+      .replace("{appKey}", keys.flightstats.appKey);
+
+    const resp = await (await fetch(url)).json();
+
+    if (resp.scheduledFlights !== undefined) {
+      let results = [];
+
+      for (const flight of resp.scheduledFlights) {
+        results.push({
+          name: airlines[flight.carrierFsCode],
+          code: `${flight.carrierFsCode} ${flight.flightNumber}`,
+          departureTime: flight.departureTime,
+          arrivalTime: flight.arrivalTime
+        });
+      }
+
+      return results;
+    }
+
+    return [];
+  },
+
+  getFlightStats: async (carrier, flightCode, from) => {
+    const url = config.flightstats.api.getFlightStats
+      .replace("{carrier}", carrier)
+      .replace("{flightCode}", flightCode)
+      .replace("{from}", from)
+      .replace("{appId}", keys.flightstats.appId)
+      .replace("{appKey}", keys.flightstats.appKey);
+
+    const resp = await (await fetch(url)).json();
+
+    if (resp.ratings.length === 0) {
+      return {};
+    }
+
+    return {
+      score: Math.floor(resp.ratings[0].ontimePercent * 100),
+      delayed: resp.ratings[0].delayObservations,
+      cancelled: resp.ratings[0].cancelled
+    };
+  },
+
+  getDelayByAirports: async airports => {
+    const url = config.flightstats.getDelayByAirports
+      .replace("{airports}", airports.join(","))
+      .replace("{appId}", keys.flightstats.appId)
+      .replace("{appKey}", keys.flightstats.appKey);
+
+    const resp = await (await fetch(url)).json();
+    const out = resp
+      .map(e => e.delayIndexes)
+      .reduce((p, c) => {
+        if (c !== null && c !== undefined && c.airport !== undefined) {
+          p[c.airport.iata] = {
+            score: c.normalizedScore,
+            cancelled: c.cancelled,
+            delayed15: c.delayed15,
+            delayed30: c.delayed30,
+            delayed45: c.delayed45
+          };
+        }
+
+        return p;
+      }, {});
+
+    return out;
   }
 };
 

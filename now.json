@@ -24,6 +24,24 @@
       "methods": ["GET"]
     },
     {
+      "src": "/flights/(.+)$",
+      "dest": "src/api/server.js",
+      "headers": { "Access-Control-Allow-Origin": "*" },
+      "methods": ["GET"]
+    },
+    {
+      "src": "/flight/(.+)$",
+      "dest": "src/api/server.js",
+      "headers": { "Access-Control-Allow-Origin": "*" },
+      "methods": ["GET"]
+    },
+    {
+      "src": "/airports/(.+)$",
+      "dest": "src/api/server.js",
+      "headers": { "Access-Control-Allow-Origin": "*" },
+      "methods": ["GET"]
+    },
+    {
       "src": ".*",
       "dest": "public/index.html"
     }

@@ -52,9 +52,8 @@ const Header = props => {
                   <p style={{ textAlign: "justify" }}>
                     We have no concept of <b>insurance claims</b> thanks to our
                     blockchain technology. Every eligible policies will be paid
-                    out with 24 hours of the scheduled arrival time of their
-                    flight. Never do you have to worry about flight insurance
-                    again!
+                    out within 24 hours of your flight arrival time. Never do
+                    you have to worry about flight insurance again!
                   </p>
                 </Card.Body>
               </Accordion.Collapse>
@@ -104,8 +103,8 @@ const Header = props => {
                 <Card.Body>
                   <p style={{ textAlign: "justify" }}>
                     Ofcourse we do! We do not need any of your personal details
-                    ever! All our policies will be stored in the blockchain, so
-                    it can viewed by anyone.
+                    ever! All our policies are stored in the blockchain, so it
+                    can viewed by anyone.
                   </p>
                 </Card.Body>
               </Accordion.Collapse>

@@ -15,6 +15,18 @@
       "callback": {
         "path": "/callback",
         "method": "post"
+      },
+      "getFlightsByRoute": {
+        "path": "/flights/search",
+        "method": "get"
+      },
+      "getFlightStats": {
+        "path": "/flight/stats",
+        "method": "get"
+      },
+      "getDelayByAirports": {
+        "path": "/airports/delay",
+        "method": "get"
       }
     },
     "policy": [
@@ -35,7 +47,9 @@
   "flightstats": {
     "api": {
       "getFlightsByRoute": "https://flightstats-api.herokuapp.com/flex/schedules/rest/v1/json/from/{from}/to/{to}/departing/{date}?appId={appId}&appKey={appKey}",
-      "getFlightStatsByRoute": "https://flightstats-api.herokuapp.com/flex/flightstatus/rest/v2/json/route/status/{from}/{to}/dep/{year}/{month}/{day}?appId={appId}&appKey={appKey}&hourOfDay={hourOfDay}&utc=true&numHours=24&maxFlights=5"
+      "getFlightStatsByRoute": "https://flightstats-api.herokuapp.com/flex/flightstatus/rest/v2/json/route/status/{from}/{to}/dep/{year}/{month}/{day}?appId={appId}&appKey={appKey}&hourOfDay={hourOfDay}&utc=true&numHours=24&maxFlights=5",
+      "getDelayByAirports": "https://flightstats-api.herokuapp.com/flex/delayindex/rest/v1/json/airports/{airports}?appId={appId}&appKey={appKey}&classification=5&score=1",
+      "getFlightStats": "https://flightstats-api.herokuapp.com/flex/ratings/rest/v1/json/flight/{carrier}/{flightCode}?appId={appId}&appKey={appKey}&departureAirport={from}"
     }
   },
   "kyber": {
