@@ -26,7 +26,21 @@ const Footer = props => {
   const [open, setOpen] = useState(false);
   const [policyId, setPolicyId] = useState("");
   const [policy, setPolicy] = useState({});
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+  const onChange = policyId => {
+    setPolicyId(policyId);
+
+    if (
+      policyId === null ||
+      policyId === undefined ||
+      policyId.trim().length === 0
+    ) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  };
 
   const search = async () => {
     setDisabled(true);
@@ -61,8 +75,7 @@ const Footer = props => {
               <MDBInput
                 value={policyId}
                 label="Policy ID"
-                disabled={disabled}
-                onChange={e => setPolicyId(e.target.value)}
+                onChange={e => onChange(e.target.value)}
               />
             </Col>
             <Col md="3" className="align-self-center">
