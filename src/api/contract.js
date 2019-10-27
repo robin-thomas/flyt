@@ -98,7 +98,7 @@ const Contract = {
 
       throw new Error(`Transaction ${txHash} has failed`);
     } catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 };

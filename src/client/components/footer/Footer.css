@@ -1,12 +1,20 @@
 .footer-container {
-  position: relative;
-  top: -90px;
   background: #f4f5f6;
-  height: 80px;
+  height: 70px;
+  border-radius: 2px;
 }
 
 .footer-container > .row {
   height: 100%;
+}
+
+.footer-container .md-form {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.footer-container button {
+  margin: 0 !important;
 }
 
 .retrieve-policy-col {

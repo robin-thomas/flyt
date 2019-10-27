@@ -55,7 +55,7 @@ code {
 }
 
 .mdb-autocomplete-wrap {
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   position: absolute;
   z-index: 100;
   left: 0;
@@ -72,7 +72,7 @@ code {
 .mdb-autocomplete-wrap li {
   padding: 12px 15px;
   cursor: pointer;
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .mdb-autocomplete-wrap li.active {
@@ -90,6 +90,7 @@ code {
 }
 
 .stepper-form-container {
+  height: calc(100vh - 50px);
   background-image: url(https://apacsteadbspltfmcdn.azureedge.net/assets/img/bgd_travel.jpeg);
   background-repeat: no-repeat;
   background-size: cover;

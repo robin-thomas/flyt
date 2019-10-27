@@ -69,7 +69,6 @@ const Footer = props => {
               <MDBBtn
                 outline
                 color="mdb-color"
-                style={{ marginTop: "-10px", marginRight: "0px" }}
                 onClick={search}
                 disabled={disabled}
               >

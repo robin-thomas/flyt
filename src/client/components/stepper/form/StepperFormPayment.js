@@ -32,7 +32,7 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
   }, [ctx.policyProducts, ctx.setPolicy, ctx.flight, ctx.search]);
 
   // TODO: to be set after premium is calculated.
-  const [eth] = useState(0.001);
+  const [eth] = useState(0.01);
 
   return (
     <div>

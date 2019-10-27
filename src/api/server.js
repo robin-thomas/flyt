@@ -56,7 +56,7 @@ app.post(config.app.api.callback.path, async (req, res) => {
 
     // Set up the scheduler keys.
     const schedulerKey = format(
-      parseISO(policy.flight.arrivalDate),
+      parseISO(policy.flight.arrivalTime),
       "yyyy-MM-dd"
     );
     const schedulerValue = await Cache.get(schedulerKey, "payment");
