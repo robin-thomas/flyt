@@ -132,11 +132,8 @@ app.get(config.app.api.getFlightStats.path, async (req, res) => {
   res.status(200).send(results);
 });
 
-app.get(config.app.api.getDelayByAirports.path, async (req, res) => {
-  const airports = req.query.airports;
-
-  const results = await Flyt.getDelayByAirports(airports.split(","));
-
+app.get(config.app.api.getDelayByAirport.path, async (req, res) => {
+  const results = await Flyt.getDelayByAirport(req.query.airport);
   res.status(200).send(results);
 });
 

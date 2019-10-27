@@ -214,30 +214,30 @@ const Flyt = {
     };
   },
 
-  getDelayByAirports: async airports => {
-    const url = config.flightstats.getDelayByAirports
-      .replace("{airports}", airports.join(","))
+  getDelayByAirport: async airport => {
+    const url = config.flightstats.api.getDelayByAirport
+      .replace("{airport}", airport)
       .replace("{appId}", keys.flightstats.appId)
       .replace("{appKey}", keys.flightstats.appKey);
 
     const resp = await (await fetch(url)).json();
-    const out = resp
-      .map(e => e.delayIndexes)
-      .reduce((p, c) => {
-        if (c !== null && c !== undefined && c.airport !== undefined) {
-          p[c.airport.iata] = {
-            score: c.normalizedScore,
-            cancelled: c.cancelled,
-            delayed15: c.delayed15,
-            delayed30: c.delayed30,
-            delayed45: c.delayed45
-          };
-        }
 
-        return p;
-      }, {});
+    let results = {};
+    if (resp.delayIndexes !== undefined && resp.delayIndexes.length > 0) {
+      for (const ele of resp.delayIndexes) {
+        const airport = ele.airport;
 
-    return out;
+        results[airport.iata] = {
+          score: ele.normalizedScore,
+          cancelled: ele.cancelled,
+          delayed15: ele.delayed15,
+          delayed30: ele.delayed30,
+          delayed45: ele.delayed45
+        };
+      }
+    }
+
+    return results;
   }
 };
 
