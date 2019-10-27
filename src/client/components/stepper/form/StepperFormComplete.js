@@ -3,12 +3,13 @@ import React, { useContext, useState, useEffect } from "react";
 import { MDBIcon, MDBBtn } from "mdbreact";
 import { Row, Col, Spinner } from "react-bootstrap";
 
+import PolicyPdf from "../../PolicyPdf";
 import Api from "../../utils/Api";
 import { DataContext } from "../../utils/DataProvider";
 import EmptyRow from "../../utils/EmptyRow";
 
 const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
-  const [success, setSuccess] = useState(false);
+  const [policy, setPolicy] = useState(null);
 
   const ctx = useContext(DataContext);
 
@@ -34,6 +35,7 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
     ctx.setPolicy(null);
     ctx.setPolicyProducts([]);
 
+    setPolicy(null);
     setIndex(0);
   };
 
@@ -44,12 +46,13 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
       // existance of which verifies payment is done
       // (payment could fail though).
 
+      let policy = null;
       while (true) {
         try {
-          const _policy = await Api.getPolicy(ctx.policy.policyId);
+          policy = await Api.getPolicy(ctx.policy.policyId);
           if (
-            _policy &&
-            _policy.owner !== "0x0000000000000000000000000000000000000000"
+            policy &&
+            policy.owner !== "0x0000000000000000000000000000000000000000"
           ) {
             break;
           }
@@ -60,7 +63,7 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
         await Api.sleep(1000 /* 1s */);
       }
 
-      setSuccess(true);
+      setPolicy(policy);
     };
 
     paymentCheck();
@@ -71,7 +74,7 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
       <EmptyRow height="60px" />
       <Row>
         <Col className="text-center">
-          {success === false ? (
+          {policy === null ? (
             <div>
               <h4>Waiting for payment confirmation</h4>
               <p style={{ fontSize: "13px" }}>* do not close the browser</p>
@@ -82,15 +85,21 @@ const StepperFormComplete = ({ setIndex, setNextDisabled }) => {
               <h4>Payment has been confirmed</h4>
               <MDBIcon icon="check" className="stepper-icon" />
               <EmptyRow height="60px" />
-              <MDBBtn
-                color="mdb-color"
-                className="btn-rounded"
-                style={{ margin: "0" }}
-                onClick={reset}
-                title="Create another policy?"
-              >
-                Another?
-              </MDBBtn>
+              <Row>
+                <Col>
+                  <PolicyPdf policy={policy} />
+                </Col>
+                <Col>
+                  <MDBBtn
+                    color="mdb-color"
+                    style={{ margin: "0" }}
+                    onClick={reset}
+                    title="Create another policy?"
+                  >
+                    Another?
+                  </MDBBtn>
+                </Col>
+              </Row>
             </div>
           )}
         </Col>

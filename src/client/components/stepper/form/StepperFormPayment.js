@@ -4,8 +4,13 @@ import Kyber from "../../utils/Kyber";
 import { DataContext } from "../../utils/DataProvider";
 import EmptyRow from "../../utils/EmptyRow";
 
+import Airports from "../../../airports.json";
+
 const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
   const ctx = useContext(DataContext);
+
+  // TODO: to be set after premium is calculated.
+  const [eth] = useState(0.001);
 
   useEffect(() => {
     const policyId =
@@ -16,12 +21,16 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
 
     const _policy = {
       policyId: policyId,
-      owner: "0x0000000000000000000000000000000000000000", // will be set once the tx is confirmed.,
+      owner: "0x0000000000000000000000000000000000000000", // will be set once the tx is confirmed
       products: ctx.policyProducts,
+      premium: {
+        amount: eth
+      },
       flight: {
-        from: ctx.search.from,
-        to: ctx.search.to,
-        code: ctx.flight.code,
+        from: Airports[ctx.search.from].iata,
+        to: Airports[ctx.search.to].iata,
+        fsCode: ctx.flight.code.split(" ")[0],
+        carrierCode: ctx.flight.code.split(" ")[1],
         name: ctx.flight.name,
         departureTime: ctx.flight.departureTime,
         arrivalTime: ctx.flight.arrivalTime
@@ -30,9 +39,6 @@ const StepperFormPayment = ({ setIndex, setNextDisabled }) => {
 
     ctx.setPolicy(_policy);
   }, [ctx.policyProducts, ctx.setPolicy, ctx.flight, ctx.search]);
-
-  // TODO: to be set after premium is calculated.
-  const [eth] = useState(0.01);
 
   return (
     <div>

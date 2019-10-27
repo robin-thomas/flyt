@@ -31,8 +31,8 @@ const Flyt = {
 
       // get the flight status.
       const status = await Flyt.getFlightStatus(
-        Flyt.toIata(policy.flight.from),
-        Flyt.toIata(policy.flight.to),
+        policy.flight.from,
+        policy.flight.to,
         policy.flight.code,
         policy.flight.departureTime
       );

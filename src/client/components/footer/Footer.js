@@ -118,59 +118,67 @@ const Footer = props => {
                 <td>Flight:</td>
                 <td>
                   {policy.flight
-                    ? `${policy.flight.name} ${policy.flight.code}`
+                    ? `${policy.flight.name} ${policy.flight.fsCode} ${policy.flight.carrierCode}`
                     : ""}
                 </td>
               </tr>
-              <tr>
-                <td>Departure Time:</td>
-                <td>
-                  {policy.flight
-                    ? format(parseISO(policy.flight.departureTime), "PPpp")
-                    : ""}
-                </td>
-              </tr>
-              <tr>
-                <td>Payment:</td>
-                <td>
-                  {policy.paid === true ? (
-                    <Badge variant="success">
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "white" }}
-                        href={config.app.network.explorer.replace(
-                          "{txHash}",
-                          policy.txHash
-                        )}
-                      >
-                        Success
-                      </a>
-                    </Badge>
-                  ) : (
-                    <Badge variant="danger">
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "white" }}
-                        href={config.app.network.explorer.replace(
-                          "{txHash}",
-                          policy.txHash
-                        )}
-                      >
-                        Failed
-                      </a>
-                    </Badge>
-                  )}
-                </td>
-              </tr>
+              {policy.flight ? (
+                <tr>
+                  <td>Departure Time:</td>
+                  <td>
+                    {format(parseISO(policy.flight.departureTime), "PPpp")}
+                  </td>
+                </tr>
+              ) : null}
+              {policy.flight ? (
+                <tr>
+                  <td>Arrival Time:</td>
+                  <td>{format(parseISO(policy.flight.arrivalTime), "PPpp")}</td>
+                </tr>
+              ) : null}
+              {policy.premium && policy.premium.paid ? (
+                <tr>
+                  <td>Payment:</td>
+                  <td>
+                    {policy.premium.paid === true ? (
+                      <Badge variant="success">
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "white" }}
+                          href={config.app.network.explorer.replace(
+                            "{txHash}",
+                            policy.premium ? policy.premium.txHash : ""
+                          )}
+                        >
+                          Success
+                        </a>
+                      </Badge>
+                    ) : (
+                      <Badge variant="danger">
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "white" }}
+                          href={config.app.network.explorer.replace(
+                            "{txHash}",
+                            policy.premium.txHash
+                          )}
+                        >
+                          Failed
+                        </a>
+                      </Badge>
+                    )}
+                  </td>
+                </tr>
+              ) : null}
             </MDBTableBody>
           </MDBTable>
-          {policy.paid !== true ? (
-            <Kyber eth={0.001} cb={console.log} />
-          ) : (
+          {policy.premium && policy.premium.paid !== true ? (
+            <Kyber eth={policy.premium.amount} cb={console.log} />
+          ) : policy.premium && policy.premium.paid === true ? (
             <PolicyPdf policy={policy} />
-          )}
+          ) : null}
         </MDBModalBody>
       </MDBModal>
     </Container>

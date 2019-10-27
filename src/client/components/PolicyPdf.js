@@ -18,10 +18,12 @@ import config from "../../config.json";
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: "http://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf" },
+    {
+      src: "https://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf"
+    },
     {
       src:
-        "http://fonts.gstatic.com/s/robotocondensed/v14/Zd2E9abXLFGSr9G3YK2MsDR-eWpsHSw83BRsAQElGgc.ttf",
+        "https://fonts.gstatic.com/s/robotocondensed/v14/Zd2E9abXLFGSr9G3YK2MsDR-eWpsHSw83BRsAQElGgc.ttf",
       fontWeight: 900
     }
   ]
@@ -52,11 +54,11 @@ const styles = StyleSheet.create({
   },
   policyHeader: {
     fontWeight: 900,
-    width: "40%",
+    width: "30%",
     textAlign: "left"
   },
   policyBody: {
-    width: "60%",
+    width: "70%",
     textAlign: "left"
   }
 });
@@ -92,8 +94,9 @@ const Policy = ({ policy }) => (
           <View style={styles.policy}>
             <Text style={styles.policyHeader}>Flight:</Text>
             <Text style={styles.policyBody}>
-              {policy.flight.name} {policy.flight.code} from{" "}
-              {policy.flight.from} ({policy.flight.departureDate})
+              {policy.flight.name} {policy.flight.fsCode}{" "}
+              {policy.flight.carrierCode} from {policy.flight.from} airport (
+              {policy.flight.departureTime})
             </Text>
           </View>
           <View style={styles.policy}>
@@ -118,8 +121,8 @@ const PolicyPdf = ({ policy }) => (
       ) : (
         <MDBBtn
           color="mdb-color"
-          className="btn-rounded"
           style={{ margin: "0" }}
+          title="Download policy document"
         >
           Download
         </MDBBtn>

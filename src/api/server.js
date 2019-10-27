@@ -19,19 +19,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 
-const getPolicyUrl = config.app.api.getPolicy.path.replace(
-  "{policyId}",
-  ":policyId"
-);
-
 app.post(config.app.api.callback.path, async (req, res) => {
   let policy = decodeURIComponent(req.body.policy);
   policy = LZUTF8.decompress(policy, { inputEncoding: "Base64" });
   policy = JSON.parse(policy);
 
-  policy.txHash = req.body.tx;
-  policy.paid = false;
   policy.owner = "0x0000000000000000000000000000000000000000";
+  policy.premium = {
+    paid: false,
+    amount: Contract.getWeb3().utils.toWei(
+      policy.premium.amount.toString(),
+      "ether"
+    ),
+    txHash: req.body.tx
+  };
+  policy.payment = {
+    paid: false,
+    amount: 0,
+    txHash: ""
+  };
 
   // Send the response back as kyber callback has a 10s timeout.
   res.status(200).send();
@@ -52,11 +58,12 @@ app.post(config.app.api.callback.path, async (req, res) => {
 
     // Overwrite the policy with real owner
     // if the transaction has passed.
-    const tx = await Contract.getTx(policy.txHash);
+    const tx = await Contract.getTx(policy.premium.txHash);
     policy.owner = tx.from;
-    policy.paid = true;
+    policy.premium.paid = true;
 
     await Contract.invokeFn("createNewPolicy", false /* isPure */, policy);
+    await Cache.delete(policy.policyId, "policy");
 
     // Set up the scheduler keys.
     const schedulerKey = format(
@@ -78,23 +85,30 @@ app.post(config.app.api.callback.path, async (req, res) => {
   }
 });
 
-app.get(getPolicyUrl, async (req, res) => {
-  const policyId = req.params.policyId;
+app.get(
+  config.app.api.getPolicy.path.replace("{policyId}", ":policyId"),
+  async (req, res) => {
+    const policyId = req.params.policyId;
 
-  let policy = await Cache.get(policyId, "policy");
-  if (policy !== undefined) {
-    res.status(200).send(policy);
-  } else {
-    policy = await Contract.invokeFn("getPolicy", true /* isPure */, policyId);
-
-    // Policy doesnt exist.
-    if (policy.policyId === "0") {
-      res.status(404).send();
+    let policy = await Cache.get(policyId, "policy");
+    if (policy !== undefined) {
+      res.status(200).send(policy);
     } else {
-      res.status(200).send(Utils.mapPolicyToObject(policy));
+      policy = await Contract.invokeFn(
+        "getPolicy",
+        true /* isPure */,
+        policyId
+      );
+
+      // Policy doesnt exist.
+      if (policy.policyId === "0") {
+        res.status(404).send();
+      } else {
+        res.status(200).send(Utils.mapPolicyToObject(policy));
+      }
     }
   }
-});
+);
 
 app.get(config.app.api.getFlightsByRoute.path, async (req, res) => {
   const from = req.query.from;
@@ -110,10 +124,10 @@ app.get(config.app.api.getFlightsByRoute.path, async (req, res) => {
 
 app.get(config.app.api.getFlightStats.path, async (req, res) => {
   const from = req.query.from;
-  const carrier = req.query.name.split(" ")[0];
-  const flightCode = req.query.name.split(" ")[1];
+  const fsCode = req.query.fsCode;
+  const carrierCode = req.query.carrierCode;
 
-  const results = await Flyt.getFlightStats(carrier, flightCode, from);
+  const results = await Flyt.getFlightStats(fsCode, carrierCode, from);
 
   res.status(200).send(results);
 });

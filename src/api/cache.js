@@ -24,6 +24,10 @@ const Cache = {
     } else {
       await Cache.getClient(namespace).set(key, value);
     }
+  },
+
+  delete: async (key, namespace) => {
+    return await Cache.getClient(namespace).delete(key);
   }
 };
 
