@@ -1349,12 +1349,12 @@
     "3": {
       "events": {},
       "links": {},
-      "address": "0x8bb5eD4c340Ecf8507270fE6ba10E4BC4d53D797",
-      "transactionHash": "0xf09a6a4a73b5d23f3ce9d4eb5af93a24ea35cc936792586f81855e94498610f7"
+      "address": "0xb61BF47EAaB2871ecc24A41fd84Ad2D6C59f60DF",
+      "transactionHash": "0xb4573470dbff291b2214dd9b6a91852c1b45377b57551c19ba2adb6cb8ef7ef3"
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-10-23T00:54:37.271Z",
+  "updatedAt": "2019-10-27T01:16:33.823Z",
   "devdoc": {
     "methods": {}
   },

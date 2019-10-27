@@ -85,4 +85,7 @@ contract Flyt {
     payments[_policyId].amount = amount;
   }
 
+  // To be able to receive ETH.
+  function () external payable {}
+
 }
