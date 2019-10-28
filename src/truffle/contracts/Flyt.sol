@@ -99,23 +99,20 @@ contract Flyt is ChainlinkClient {
     }
 
     // Calculate the policy premium.
-    function getPremium(string memory _policyId)
-        public
-        returns (uint256 result)
-    {
+    function getPremium(
+        string memory _policyId,
+        string memory _from,
+        string memory _fsCode,
+        string memory _carrierCode
+    ) public returns (uint256 result) {
         require(isPolicy[_policyId] == true);
 
         // Send the chainlink requests to the oracles if not sent.
         if (premiums[_policyId].hasAirportRating == false) {
-            getAirportRating(_policyId, policies[_policyId].flight.from);
+            getAirportRating(_policyId, _from);
         }
         if (premiums[_policyId].hasFlightRating == false) {
-            getFlightRating(
-                _policyId,
-                policies[_policyId].flight.from,
-                policies[_policyId].flight.fsCode,
-                policies[_policyId].flight.carrierCode
-            );
+            getFlightRating(_policyId, _from, _fsCode, _carrierCode);
         }
 
         // Calculate the premium if chainlink requests have all returned.
@@ -131,6 +128,7 @@ contract Flyt is ChainlinkClient {
             uint256 a = premiums[_policyId].flightRating.mul(7);
             uint256 f = premiums[_policyId].airportRating.mul(3);
             result = a.add(f).div(10);
+            result = 100.sub(result);
 
             premiums[_policyId].premium = result;
         }
@@ -140,14 +138,12 @@ contract Flyt is ChainlinkClient {
         private
         returns (bytes32 requestId)
     {
-        // newRequest takes a JobID, a callback address, and callback function as input.
         Chainlink.Request memory req = buildChainlinkRequest(
             JOB_ID,
             address(this),
             this.setAirportRating.selector
         );
 
-        // Adds a URL with the key "get" to the request parameters.
         req.add(
             "get",
             string(
@@ -155,10 +151,8 @@ contract Flyt is ChainlinkClient {
             )
         );
 
-        // Adds a dot-delimited JSON path with the key "path" to the request parameters.
         req.add("path", string(abi.encodePacked(_airport, ".score")));
 
-        // Sends the request with 1 LINK to the oracle contract
         requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
 
         requests[requestId] = _policyId;
@@ -168,7 +162,6 @@ contract Flyt is ChainlinkClient {
         public
         recordChainlinkFulfillment(_requestId)
     {
-        // Use recordChainlinkFulfillment to ensure only the requesting oracle can fulfill
         premiums[requests[_requestId]].hasAirportRating = true;
         premiums[requests[_requestId]].airportRating = _score;
     }
@@ -179,13 +172,11 @@ contract Flyt is ChainlinkClient {
         string memory _fsCode,
         string memory _carrierCode
     ) private returns (bytes32 requestId) {
-        // newRequest takes a JobID, a callback address, and callback function as input.
         Chainlink.Request memory req = buildChainlinkRequest(
             JOB_ID,
             address(this),
             this.setFlightRating.selector
         );
-        // Adds a URL with the key "get" to the request parameters.
         req.add(
             "get",
             string(
@@ -200,11 +191,8 @@ contract Flyt is ChainlinkClient {
                 )
             )
         );
-        // Adds a dot-delimited JSON path with the key "path" to the request parameters.
         req.add("path", string(abi.encodePacked(_from, ".score")));
-        // Adds an integer with the key "times" to the request parameters
-        req.addInt("times", 20);
-        // Sends the request with 1 LINK to the oracle contract
+
         requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
 
         requests[requestId] = _policyId;
@@ -214,7 +202,6 @@ contract Flyt is ChainlinkClient {
         public
         recordChainlinkFulfillment(_requestId)
     {
-        // Use recordChainlinkFulfillment to ensure only the requesting oracle can fulfill
         premiums[requests[_requestId]].hasFlightRating = true;
         premiums[requests[_requestId]].flightRating = _rating;
     }
@@ -234,7 +221,6 @@ contract Flyt is ChainlinkClient {
         policies[_policyId].payment.amount = amount;
     }
 
-    // To be able to receive ETH.
     function() external payable {}
 
 }
