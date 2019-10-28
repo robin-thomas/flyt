@@ -28,7 +28,7 @@
     "@react-pdf/renderer": "^1.6.7",
     "@truffle/hdwallet-provider": "1.0.22",
     "bootstrap": "^4.3.1",
-    "chainlink": "^0.7.5",
+    "chainlink": "0.7.5",
     "date-fns": "^2.4.1",
     "express": "^4.17.1",
     "keyv": "^3.1.0",

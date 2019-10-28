@@ -48,8 +48,6 @@ const Flyt = {
         policyId
       );
 
-      console.log("premium", premium);
-
       if (!isNaN(premium) && premium >= 1) {
         premium = (100.0 - premium) / 100.0;
       } else {

@@ -59,7 +59,6 @@ contract Flyt is ChainlinkClient {
 
     constructor() public {
         setPublicChainlinkToken();
-        setChainlinkOracle(ORACLE);
         owner = msg.sender; // set the owner of the contract.
     }
 
@@ -109,7 +108,7 @@ contract Flyt is ChainlinkClient {
     {
         // Calculate the premium if chainlink requests have all returned.
         // Its done using weighted average.
-        // result = 0;
+        result = 0;
         if (
             premiums[_policyId].hasAirportRating ==
             PremiumRequestStatus.COMPLETED &&
@@ -168,13 +167,16 @@ contract Flyt is ChainlinkClient {
         req.add("path", string(abi.encodePacked(_airport, ".score")));
         req.addInt("times", 1);
 
-        requestId = sendChainlinkRequest(req, 1 * LINK);
+        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
 
         requests[requestId] = _policyId;
         premiums[_policyId].hasAirportRating = PremiumRequestStatus.SENT;
     }
 
-    function setAirportRating(bytes32 _requestId, uint256 _score) public {
+    function setAirportRating(bytes32 _requestId, uint256 _score)
+        public
+        recordChainlinkFulfillment(_requestId)
+    {
         premiums[requests[_requestId]].hasAirportRating = PremiumRequestStatus
             .COMPLETED;
         premiums[requests[_requestId]].airportRating = _score;
@@ -209,13 +211,16 @@ contract Flyt is ChainlinkClient {
 
         req.add("path", "score");
 
-        requestId = sendChainlinkRequest(req, 1 * LINK);
+        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
 
         requests[requestId] = _policyId;
         premiums[_policyId].hasFlightRating = PremiumRequestStatus.SENT;
     }
 
-    function setFlightRating(bytes32 _requestId, uint256 _rating) public {
+    function setFlightRating(bytes32 _requestId, uint256 _rating)
+        public
+        recordChainlinkFulfillment(_requestId)
+    {
         premiums[requests[_requestId]].hasFlightRating = PremiumRequestStatus
             .COMPLETED;
         premiums[requests[_requestId]].flightRating = _rating;
