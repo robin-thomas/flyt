@@ -15,30 +15,36 @@
     {
       "src": "/callback",
       "dest": "src/api/server.js",
-      "headers": { "Access-Control-Allow-Origin": "*" }
+      "headers": {"Access-Control-Allow-Origin": "*"}
     },
     {
       "src": "/policy/(.+)$",
       "dest": "src/api/server.js",
-      "headers": { "Access-Control-Allow-Origin": "*" },
+      "headers": {"Access-Control-Allow-Origin": "*"},
       "methods": ["GET"]
     },
     {
       "src": "/flights/(.+)$",
       "dest": "src/api/server.js",
-      "headers": { "Access-Control-Allow-Origin": "*" },
+      "headers": {"Access-Control-Allow-Origin": "*"},
       "methods": ["GET"]
     },
     {
       "src": "/flight/(.+)$",
       "dest": "src/api/server.js",
-      "headers": { "Access-Control-Allow-Origin": "*" },
+      "headers": {"Access-Control-Allow-Origin": "*"},
       "methods": ["GET"]
     },
     {
       "src": "/airport/(.+)$",
       "dest": "src/api/server.js",
-      "headers": { "Access-Control-Allow-Origin": "*" },
+      "headers": {"Access-Control-Allow-Origin": "*"},
+      "methods": ["GET"]
+    },
+    {
+      "src": "/premium",
+      "dest": "src/api/server.js",
+      "headers": {"Access-Control-Allow-Origin": "*"},
       "methods": ["GET"]
     },
     {

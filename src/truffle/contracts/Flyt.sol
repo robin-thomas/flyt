@@ -42,12 +42,14 @@ contract Flyt is ChainlinkClient {
         Payment payment;
     }
 
+    enum PremiumRequestStatus {INIT, SENT, COMPLETED}
+
     struct Premium {
-        bool hasAirportRating;
-        bool hasFlightRating;
+        bool init;
         uint256 airportRating;
         uint256 flightRating;
-        uint256 premium;
+        PremiumRequestStatus hasAirportRating;
+        PremiumRequestStatus hasFlightRating;
     }
 
     mapping(string => bool) isPolicy;
@@ -57,6 +59,7 @@ contract Flyt is ChainlinkClient {
 
     constructor() public {
         setPublicChainlinkToken();
+        setChainlinkOracle(ORACLE);
         owner = msg.sender; // set the owner of the contract.
     }
 
@@ -98,29 +101,20 @@ contract Flyt is ChainlinkClient {
         }
     }
 
-    // Calculate the policy premium.
-    function getPremium(
-        string memory _policyId,
-        string memory _from,
-        string memory _fsCode,
-        string memory _carrierCode
-    ) public returns (uint256 result) {
-        require(isPolicy[_policyId] == true);
-
-        // Send the chainlink requests to the oracles if not sent.
-        if (premiums[_policyId].hasAirportRating == false) {
-            getAirportRating(_policyId, _from);
-        }
-        if (premiums[_policyId].hasFlightRating == false) {
-            getFlightRating(_policyId, _from, _fsCode, _carrierCode);
-        }
-
+    function getPremium(string memory _policyId)
+        public
+        view
+        _ownerOnly
+        returns (uint256 result)
+    {
         // Calculate the premium if chainlink requests have all returned.
         // Its done using weighted average.
-        result = 0;
+        // result = 0;
         if (
-            premiums[_policyId].hasAirportRating == true &&
-            premiums[_policyId].hasFlightRating == true
+            premiums[_policyId].hasAirportRating ==
+            PremiumRequestStatus.COMPLETED &&
+            premiums[_policyId].hasFlightRating ==
+            PremiumRequestStatus.COMPLETED
         ) {
             // Calculate the value based on weighted average.
             // Flight Rating (based on historical performance) is given 70% weightage.
@@ -128,9 +122,29 @@ contract Flyt is ChainlinkClient {
             uint256 a = premiums[_policyId].flightRating.mul(7);
             uint256 f = premiums[_policyId].airportRating.mul(3);
             result = a.add(f).div(10);
-            result = 100.sub(result);
+        }
+    }
 
-            premiums[_policyId].premium = result;
+    // Calculate the policy premium.
+    function calculatePremium(
+        string memory _policyId,
+        string memory _from,
+        string memory _fsCode,
+        string memory _carrierCode
+    ) public _ownerOnly {
+        // Set the initial state.
+        if (premiums[_policyId].init == false) {
+            premiums[_policyId].hasAirportRating = PremiumRequestStatus.INIT;
+            premiums[_policyId].hasFlightRating = PremiumRequestStatus.INIT;
+            premiums[_policyId].init = true;
+        }
+
+        // Send the chainlink requests to the oracles if not sent.
+        if (premiums[_policyId].hasAirportRating == PremiumRequestStatus.INIT) {
+            getAirportRating(_policyId, _from);
+        }
+        if (premiums[_policyId].hasFlightRating == PremiumRequestStatus.INIT) {
+            getFlightRating(_policyId, _from, _fsCode, _carrierCode);
         }
     }
 
@@ -152,17 +166,17 @@ contract Flyt is ChainlinkClient {
         );
 
         req.add("path", string(abi.encodePacked(_airport, ".score")));
+        req.addInt("times", 1);
 
-        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
+        requestId = sendChainlinkRequest(req, 1 * LINK);
 
         requests[requestId] = _policyId;
+        premiums[_policyId].hasAirportRating = PremiumRequestStatus.SENT;
     }
 
-    function setAirportRating(bytes32 _requestId, uint256 _score)
-        public
-        recordChainlinkFulfillment(_requestId)
-    {
-        premiums[requests[_requestId]].hasAirportRating = true;
+    function setAirportRating(bytes32 _requestId, uint256 _score) public {
+        premiums[requests[_requestId]].hasAirportRating = PremiumRequestStatus
+            .COMPLETED;
         premiums[requests[_requestId]].airportRating = _score;
     }
 
@@ -177,6 +191,7 @@ contract Flyt is ChainlinkClient {
             address(this),
             this.setFlightRating.selector
         );
+
         req.add(
             "get",
             string(
@@ -186,23 +201,23 @@ contract Flyt is ChainlinkClient {
                     _from,
                     "&fsCode=",
                     _fsCode,
-                    "&carrierCode",
+                    "&carrierCode=",
                     _carrierCode
                 )
             )
         );
-        req.add("path", string(abi.encodePacked(_from, ".score")));
 
-        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
+        req.add("path", "score");
+
+        requestId = sendChainlinkRequest(req, 1 * LINK);
 
         requests[requestId] = _policyId;
+        premiums[_policyId].hasFlightRating = PremiumRequestStatus.SENT;
     }
 
-    function setFlightRating(bytes32 _requestId, uint256 _rating)
-        public
-        recordChainlinkFulfillment(_requestId)
-    {
-        premiums[requests[_requestId]].hasFlightRating = true;
+    function setFlightRating(bytes32 _requestId, uint256 _rating) public {
+        premiums[requests[_requestId]].hasFlightRating = PremiumRequestStatus
+            .COMPLETED;
         premiums[requests[_requestId]].flightRating = _rating;
     }
 

@@ -21,6 +21,47 @@ const Flyt = {
     }
   },
 
+  getPremium: async (policyId, from, fsCode, carrierCode) => {
+    try {
+      // Make sure to trigger this contract function only once.
+      const value = await Cache.get(policyId, Cache.TRIGGER_PREMIUM);
+      if (value === undefined) {
+        // Trigger the function to calculate the premium.
+        Contract.invokeFn(
+          "calculatePremium",
+          false /* isPure */,
+          policyId,
+          from,
+          fsCode,
+          carrierCode
+        ).then(console.error);
+
+        await Cache.set(policyId, true, Cache.TRIGGER_PREMIUM);
+      }
+
+      // Retrieve the premium value if already calculated.
+      // If not, the client-side needs to keep triggering this api,
+      // as all apis have a 10 seconds timeout.
+      let premium = await Contract.invokeFn(
+        "getPremium",
+        true /* isPure */,
+        policyId
+      );
+
+      console.log("premium", premium);
+
+      if (!isNaN(premium) && premium >= 1) {
+        premium = (100.0 - premium) / 100.0;
+      } else {
+        premium = 0;
+      }
+
+      return premium;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
   calculatePayment: async policyId => {
     try {
       const policy = await Contract.invokeFn(
@@ -120,7 +161,7 @@ const Flyt = {
       }
     };
 
-    const value = await Cache.get(key, "flight");
+    const value = await Cache.get(key, Cache.FLIGHT);
     if (value !== undefined && value !== null) {
       return getFlightStatus(value.flightStatuses);
     }
@@ -152,7 +193,7 @@ const Flyt = {
       .replace("{appKey}", keys.flightstats.appKey);
 
     const resp = await (await fetch(url)).json();
-    await Cache.set(key, resp, "flight");
+    await Cache.set(key, resp, Cache.FLIGHT);
 
     return getFlightStatus(resp.flightStatuses);
   },
@@ -203,15 +244,20 @@ const Flyt = {
 
     const resp = await (await fetch(url)).json();
 
-    if (resp.ratings.length === 0) {
-      let result = {};
-      result[from] = {
+    if (
+      resp.ratings === null ||
+      resp.ratings === undefined ||
+      resp.ratings.length === 0
+    ) {
+      return {
         score: 50
       };
     }
 
     return {
-      score: Math.floor(resp.ratings[0].ontimePercent * 100),
+      score: isNaN(resp.ratings[0].ontimePercent)
+        ? 0
+        : Math.floor(resp.ratings[0].ontimePercent * 100),
       delayed: resp.ratings[0].delayObservations,
       cancelled: resp.ratings[0].cancelled
     };

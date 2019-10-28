@@ -1,6 +1,11 @@
 const Keyv = require("keyv");
 
 const Cache = {
+  TRIGGER_PREMIUM: "triggerPremium",
+  FLIGHT: "flight",
+  POLICY: "policy",
+  PAYMENT: "payment",
+
   client: {},
 
   getClient: namespace => {
@@ -8,7 +13,7 @@ const Cache = {
       Cache.client[namespace] === null ||
       Cache.client[namespace] === undefined
     ) {
-      Cache.client[namespace] = new Keyv({ namespace: namespace });
+      Cache.client[namespace] = new Keyv({namespace: namespace});
     }
 
     return Cache.client[namespace];

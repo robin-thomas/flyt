@@ -21,7 +21,7 @@ app.use(express.urlencoded());
 
 app.post(config.app.api.callback.path, async (req, res) => {
   let policy = decodeURIComponent(req.body.policy);
-  policy = LZUTF8.decompress(policy, { inputEncoding: "Base64" });
+  policy = LZUTF8.decompress(policy, {inputEncoding: "Base64"});
   policy = JSON.parse(policy);
 
   policy.owner = "0x0000000000000000000000000000000000000000";
@@ -49,7 +49,7 @@ app.post(config.app.api.callback.path, async (req, res) => {
     await Cache.set(
       policy.policyId,
       policy,
-      "policy",
+      Cache.POLICY,
       5 * 60 * 1000 /* 5 minutes TTL */
     );
 
@@ -63,21 +63,21 @@ app.post(config.app.api.callback.path, async (req, res) => {
     policy.premium.paid = true;
 
     await Contract.invokeFn("createNewPolicy", false /* isPure */, policy);
-    await Cache.delete(policy.policyId, "policy");
+    await Cache.delete(policy.policyId, Cache.POLICY);
 
     // Set up the scheduler keys.
     const schedulerKey = format(
       parseISO(policy.flight.arrivalTime),
       "yyyy-MM-dd"
     );
-    const schedulerValue = await Cache.get(schedulerKey, "payment");
+    const schedulerValue = await Cache.get(schedulerKey, Cache.PAYMENT);
     if (schedulerValue === undefined) {
-      await Cache.set(schedulerKey, [policy.policyId], "payment");
+      await Cache.set(schedulerKey, [policy.policyId], Cache.PAYMENT);
     } else {
       await Cache.set(
         schedulerKey,
         [...schedulerValue, policy.policyId],
-        "payment"
+        Cache.PAYMENT
       );
     }
   } catch (err) {
@@ -90,7 +90,7 @@ app.get(
   async (req, res) => {
     const policyId = req.params.policyId;
 
-    let policy = await Cache.get(policyId, "policy");
+    let policy = await Cache.get(policyId, Cache.POLICY);
     if (policy !== undefined) {
       res.status(200).send(policy);
     } else {
@@ -135,6 +135,16 @@ app.get(config.app.api.getFlightStats.path, async (req, res) => {
 app.get(config.app.api.getDelayByAirport.path, async (req, res) => {
   const results = await Flyt.getDelayByAirport(req.query.airport);
   res.status(200).send(results);
+});
+
+app.get(config.app.api.getPremium.path, async (req, res) => {
+  const policyId = req.query.policyId;
+  const from = req.query.from;
+  const fsCode = req.query.fsCode;
+  const carrierCode = req.query.carrierCode;
+
+  const premium = await Flyt.getPremium(policyId, from, fsCode, carrierCode);
+  res.status(200).send({premium});
 });
 
 const port = !_.isUndefined(process.env.PORT) ? process.env.PORT : 4000;

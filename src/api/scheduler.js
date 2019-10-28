@@ -14,7 +14,7 @@ const Scheduler = {
       const date = format(endOfYesterday(), "yyyy-MM-dd");
 
       // Get the previous UTC date.
-      const policyIds = await Cache.get(date, "payment");
+      const policyIds = await Cache.get(date, Cache.PAYMENT);
       if (
         policyIds === undefined ||
         policyIds === null ||
@@ -34,7 +34,7 @@ const Scheduler = {
       }
 
       // Remove all the policyIds for this date.
-      await Cache.set(date, [], "payment");
+      await Cache.set(date, [], Cache.PAYMENT);
     });
   }
 };

@@ -1,15 +1,13 @@
 const Web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
+const Utils = require("./utils");
+
 const keys = require("../keys.json");
 const config = require("../config.json");
 const contract = require("../truffle/_build/contracts/Flyt.json");
 
 const Contract = {
-  sleep: ms => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  },
-
   getWeb3Provider: () => {
     return new HDWalletProvider(
       keys.metamask.mnemonic,
@@ -87,7 +85,7 @@ const Contract = {
         break;
       }
 
-      await Contract.sleep(1000 /* 1s */);
+      await Utils.sleep(1000 /* 1s */);
     }
 
     try {

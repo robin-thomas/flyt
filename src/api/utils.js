@@ -1,6 +1,10 @@
 const Contract = require("./contract");
 
 const Utils = {
+  sleep: ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  },
+
   mapPolicyToObject: policy => {
     return {
       policyId: policy[0],
