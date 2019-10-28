@@ -2,15 +2,20 @@ pragma solidity >=0.5.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 import "chainlink/v0.5/contracts/ChainlinkClient.sol";
+import {
+    SafeMath as SafeMath_Chainlink
+} from "chainlink/v0.5/contracts/vendor/SafeMath.sol";
 
 contract Flyt is ChainlinkClient {
-    address owner;
+    using SafeMath_Chainlink for uint256;
 
     bytes32 private constant JOB_ID = "3cff0a3524694ff8834bda9cf9c779a1";
     address private constant ORACLE = "0xc99B3D447826532722E41bc36e644ba3479E4365";
 
     string private constant GET_AIRPORT_DELAY_URL = "https://flyt.robinthomas2591.now.sh/airport/delay";
     string private constant GET_FLIGHT_RATING_URL = "https://flyt.robinthomas2591.now.sh/flight/stats";
+
+    address owner;
 
     struct Flight {
         string from;
@@ -94,7 +99,11 @@ contract Flyt is ChainlinkClient {
     }
 
     // Calculate the policy premium.
-    function getPremium(string memory _policyId) public view returns (int256) {
+    function getPremium(string memory _policyId)
+        public
+        view
+        returns (uint256 result)
+    {
         require(isPolicy[_policyId] == true);
 
         // Send the chainlink requests to the oracles if not sent.
@@ -110,15 +119,22 @@ contract Flyt is ChainlinkClient {
             );
         }
 
-        // Calculate the request if chainlink requests have all returned.
+        // Calculate the premium if chainlink requests have all returned.
+        // Its done using weighted average.
+        uint256 result = 0;
         if (
             premiums[_policyId].hasAirportRating == true &&
             premiums[_policyId].hasFlightRating == true
         ) {
-            premiums[_policyId].premium = 0;
-        }
+            // Calculate the value based on weighted average.
+            // Flight Rating (based on historical performance) is given 70% weightage.
+            // Departure Airport Rating is given 30% weightage.
+            uint256 a = premiums[_policyId].flightRating.mul(7);
+            uint256 f = premiums[_policyId].airportRating.mul(3);
+            result = a.add(f).div(10);
 
-        return -1;
+            premiums[_policyId].premium = result;
+        }
     }
 
     function getAirportRating(string memory _policyId, string memory _airport)
@@ -131,6 +147,7 @@ contract Flyt is ChainlinkClient {
             this,
             this.setAirportRating.selector
         );
+
         // Adds a URL with the key "get" to the request parameters.
         req.add(
             "get",
@@ -138,10 +155,10 @@ contract Flyt is ChainlinkClient {
                 abi.encodePacked(GET_AIRPORT_DELAY_URL, "?airport=", _airport)
             )
         );
+
         // Adds a dot-delimited JSON path with the key "path" to the request parameters.
         req.add("path", string(abi.encodePacked(_airport, ".score")));
-        // Adds an integer with the key "times" to the request parameters
-        req.addInt("times", 20);
+
         // Sends the request with 1 LINK to the oracle contract
         requestId = sendChainlinkRequest(ORACLE, req, 1 * LINK);
 

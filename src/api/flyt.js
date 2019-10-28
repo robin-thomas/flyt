@@ -204,7 +204,10 @@ const Flyt = {
     const resp = await (await fetch(url)).json();
 
     if (resp.ratings.length === 0) {
-      return {};
+      let result = {};
+      result[from] = {
+        score: 50
+      };
     }
 
     return {
@@ -228,7 +231,7 @@ const Flyt = {
         const airport = ele.airport;
 
         results[airport.iata] = {
-          score: ele.normalizedScore,
+          score: Math.floor((5.0 - ele.normalizedScore) * 20),
           cancelled: ele.cancelled,
           delayed15: ele.delayed15,
           delayed30: ele.delayed30,
