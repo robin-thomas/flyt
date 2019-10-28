@@ -10,12 +10,12 @@ contract Flyt is ChainlinkClient {
     using SafeMath_Chainlink for uint256;
 
     bytes32 private constant JOB_ID = "3cff0a3524694ff8834bda9cf9c779a1";
-    address private constant ORACLE = "0xc99B3D447826532722E41bc36e644ba3479E4365";
+    address private constant ORACLE = 0xc99B3D447826532722E41bc36e644ba3479E4365;
 
     string private constant GET_AIRPORT_DELAY_URL = "https://flyt.robinthomas2591.now.sh/airport/delay";
     string private constant GET_FLIGHT_RATING_URL = "https://flyt.robinthomas2591.now.sh/flight/stats";
 
-    address owner;
+    address public owner;
 
     struct Flight {
         string from;
@@ -53,7 +53,7 @@ contract Flyt is ChainlinkClient {
     mapping(string => bool) isPolicy;
     mapping(string => Policy) policies;
     mapping(string => Premium) premiums;
-    mapping(string => string) requests;
+    mapping(bytes32 => string) requests;
 
     constructor() public {
         setPublicChainlinkToken();
@@ -101,7 +101,6 @@ contract Flyt is ChainlinkClient {
     // Calculate the policy premium.
     function getPremium(string memory _policyId)
         public
-        view
         returns (uint256 result)
     {
         require(isPolicy[_policyId] == true);
@@ -121,7 +120,7 @@ contract Flyt is ChainlinkClient {
 
         // Calculate the premium if chainlink requests have all returned.
         // Its done using weighted average.
-        uint256 result = 0;
+        result = 0;
         if (
             premiums[_policyId].hasAirportRating == true &&
             premiums[_policyId].hasFlightRating == true
@@ -144,7 +143,7 @@ contract Flyt is ChainlinkClient {
         // newRequest takes a JobID, a callback address, and callback function as input.
         Chainlink.Request memory req = buildChainlinkRequest(
             JOB_ID,
-            this,
+            address(this),
             this.setAirportRating.selector
         );
 
@@ -160,7 +159,7 @@ contract Flyt is ChainlinkClient {
         req.add("path", string(abi.encodePacked(_airport, ".score")));
 
         // Sends the request with 1 LINK to the oracle contract
-        requestId = sendChainlinkRequest(ORACLE, req, 1 * LINK);
+        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
 
         requests[requestId] = _policyId;
     }
@@ -170,8 +169,8 @@ contract Flyt is ChainlinkClient {
         recordChainlinkFulfillment(_requestId)
     {
         // Use recordChainlinkFulfillment to ensure only the requesting oracle can fulfill
-        premium[requests[_requestId]].hasAirportRating = true;
-        premium[requests[_requestId]].airportRating = _score;
+        premiums[requests[_requestId]].hasAirportRating = true;
+        premiums[requests[_requestId]].airportRating = _score;
     }
 
     function getFlightRating(
@@ -183,7 +182,7 @@ contract Flyt is ChainlinkClient {
         // newRequest takes a JobID, a callback address, and callback function as input.
         Chainlink.Request memory req = buildChainlinkRequest(
             JOB_ID,
-            this,
+            address(this),
             this.setFlightRating.selector
         );
         // Adds a URL with the key "get" to the request parameters.
@@ -202,11 +201,11 @@ contract Flyt is ChainlinkClient {
             )
         );
         // Adds a dot-delimited JSON path with the key "path" to the request parameters.
-        req.add("path", string(abi.encodePacked(_airport, ".score")));
+        req.add("path", string(abi.encodePacked(_from, ".score")));
         // Adds an integer with the key "times" to the request parameters
         req.addInt("times", 20);
         // Sends the request with 1 LINK to the oracle contract
-        requestId = sendChainlinkRequest(ORACLE, req, 1 * LINK);
+        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
 
         requests[requestId] = _policyId;
     }
@@ -216,8 +215,8 @@ contract Flyt is ChainlinkClient {
         recordChainlinkFulfillment(_requestId)
     {
         // Use recordChainlinkFulfillment to ensure only the requesting oracle can fulfill
-        premium[requests[_requestId]].hasFlightRating = true;
-        premium[requests[_requestId]].flightRating = _rating;
+        premiums[requests[_requestId]].hasFlightRating = true;
+        premiums[requests[_requestId]].flightRating = _rating;
     }
 
     function payPolicy(string memory _policyId, uint256 amount)
