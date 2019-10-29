@@ -1,8 +1,6 @@
 const Web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const Utils = require("./utils");
-
 const keys = require("../keys.json");
 const config = require("../config.json");
 const contract = require("../truffle/_build/contracts/Flyt.json");
@@ -85,7 +83,7 @@ const Contract = {
         break;
       }
 
-      await Utils.sleep(1000 /* 1s */);
+      await Contract.sleep(1000 /* 1s */);
     }
 
     try {
@@ -98,6 +96,10 @@ const Contract = {
     } catch (err) {
       throw err;
     }
+  },
+
+  sleep: ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 };
 

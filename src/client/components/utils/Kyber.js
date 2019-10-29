@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 
 import LZUTF8 from "lzutf8";
-import { MDBBtn } from "mdbreact";
+import {MDBBtn} from "mdbreact";
 
 import Api from "./Api";
-import { DataContext } from "./DataProvider";
+import {DataContext} from "./DataProvider";
 
 import contract from "../../../truffle/_build/contracts/Flyt.json";
 import config from "../../../config.json";
 
-const Kyber = ({ cls, disabled, eth, cb }) => {
+const Kyber = ({cls, disabled, eth, cb}) => {
   // Constant values.
   const ethAddress = contract.networks[config.app.network.network_id].address;
   const callback = encodeURIComponent(config.kyber.callback);
@@ -19,7 +19,7 @@ const Kyber = ({ cls, disabled, eth, cb }) => {
 
   const paymentCheck = async () => {
     let _policy = JSON.stringify(ctx.policy);
-    _policy = LZUTF8.compress(_policy, { outputEncoding: "Base64" });
+    _policy = LZUTF8.compress(_policy, {outputEncoding: "Base64"});
     _policy = encodeURIComponent(_policy);
 
     const url = config.kyber.pay
@@ -48,8 +48,6 @@ const Kyber = ({ cls, disabled, eth, cb }) => {
     // existance of which verifies payment is done
     // (payment could fail though).
 
-    console.log(`Policy ID: ${ctx.policy.policyId}`);
-
     while (true) {
       try {
         const _policy = await Api.getPolicy(ctx.policy.policyId);
@@ -71,7 +69,7 @@ const Kyber = ({ cls, disabled, eth, cb }) => {
     <MDBBtn
       color="mdb-color"
       className={cls ? cls : ""}
-      style={{ margin: "0" }}
+      style={{margin: "0"}}
       disabled={disabled ? disabled : false}
       onClick={paymentCheck}
     >

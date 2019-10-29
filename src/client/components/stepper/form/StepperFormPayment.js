@@ -22,6 +22,7 @@ const StepperFormPayment = ({setIndex, setNextDisabled}) => {
         Math.random()
           .toString(10)
           .substring(2, 10);
+      console.log("Policy ID: ", policyId);
 
       const from = Airports[ctx.search.from].iata;
       const fsCode = ctx.flight.code.split(" ")[0];
