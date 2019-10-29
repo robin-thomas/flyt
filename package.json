@@ -12,7 +12,8 @@
     "now-build": "npm run build && mv build dist",
     "deploy": "npm run deploy:contract && npm run deploy:dapp",
     "deploy:dapp": "now",
-    "deploy:contract": "node ./scripts/deploy.js truffle"
+    "deploy:contract": "node ./scripts/deploy.js truffle",
+    "test:contract": "truffle test src/truffle/test/flyt.js"
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
     "eslint-config-react-app": "^5.0.2",
     "eslint-plugin-node": "^10.0.0",
     "husky": "^3.0.9",
+    "link_token": "^1.0.6",
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
     "prettier-plugin-solidity": "^1.0.0-alpha.34"
@@ -71,6 +73,9 @@
     ],
     "rules": {
       "no-console": [
+        "off"
+      ],
+      "no-empty": [
         "off"
       ],
       "no-constant-condition": [
