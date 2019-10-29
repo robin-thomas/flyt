@@ -1,7 +1,7 @@
 import React from "react";
 
-import { MDBBtn } from "mdbreact";
-import { Spinner } from "react-bootstrap";
+import {MDBBtn} from "mdbreact";
+import {Spinner} from "react-bootstrap";
 
 import {
   Page,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const Policy = ({ policy }) => (
+const Policy = ({policy}) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View>
@@ -101,7 +101,7 @@ const Policy = ({ policy }) => (
           </View>
           <View style={styles.policy}>
             <Text style={styles.policyHeader}>Insured against:</Text>
-            <Text style={styles.policyBody}>{policy.products.join(" ,")}</Text>
+            <Text style={styles.policyBody}>{policy.products.join(", ")}</Text>
           </View>
         </View>
         <Text>Subject to the Terms and Conditions of this Policy.</Text>
@@ -110,18 +110,18 @@ const Policy = ({ policy }) => (
   </Document>
 );
 
-const PolicyPdf = ({ policy }) => (
+const PolicyPdf = ({policy}) => (
   <PDFDownloadLink
     document={<Policy policy={policy} />}
     fileName={`policy-${policy.policyId}.pdf`}
   >
-    {({ loading }) =>
+    {({loading}) =>
       loading ? (
         <Spinner animation="border" size="sm" role="status" />
       ) : (
         <MDBBtn
           color="mdb-color"
-          style={{ margin: "0" }}
+          style={{margin: "0"}}
           title="Download policy document"
         >
           Download
