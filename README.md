@@ -15,6 +15,14 @@
 We have no concept of insurance claims thanks to our blockchain technology. Every eligible policies will be paid out within 24 hours of your flight arrival time. Never do you have to worry about flight insurance again!
 
 # Features
+* No accounts or personal details required
+* Search for flights based on departure & arrival airport and date
+* Fully customizable policy. Can add or remove policy products for which you want to be insured against
+* Pay the insurance premium in ETH or a multitude of other cryptocurrencies, thanks to Kyber's technology
+* Download the insurance policy document in PDF form
+* Search for a policy if you know the policy ID
+* Policy shall be paid automatically in ETH to the same wallet from which the premium was paid, once it matures and the user is eligible for a payout.
+* Nothing for the user to do other than buying a policy!
 
 # Architecture
 * The front-end code is written on React, CSS and HTML
