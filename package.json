@@ -10,14 +10,15 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "now-build": "npm run build && mv build dist",
-    "deploy": "npm run deploy:contract && npm run deploy:dapp",
-    "deploy:dapp": "now",
-    "deploy:contract": "node ./scripts/deploy.js truffle",
-    "test:contract": "truffle test src/truffle/test/flyt.js"
+    "deploy": "npm run contract:deploy && npm run dapp:deploy",
+    "dapp:deploy": "now",
+    "contract:deploy": "node ./scripts/deploy.js truffle",
+    "contract:test": "truffle test src/truffle/test/flyt.js",
+    "contract:coverage": "truffle run coverage --file=src/truffle/test/flyt.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robin-thomas/flight.git"
+    "url": "git+https://github.com/robin-thomas/flyt.git"
   },
   "author": "Robin Thomas <robinthomas2591@gmail.com>",
   "license": "MIT",
@@ -55,7 +56,8 @@
     "link_token": "^1.0.6",
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
-    "prettier-plugin-solidity": "^1.0.0-alpha.34"
+    "prettier-plugin-solidity": "^1.0.0-alpha.34",
+    "solidity-coverage": "^0.7.0-beta.2"
   },
   "husky": {
     "hooks": {

@@ -5,7 +5,7 @@ const Flyt = artifacts.require("Flyt");
 module.exports = (deployer, network) => {
   // Local (development) networks need their own deployment of the LINK
   // token and the Oracle contract
-  if (network === "test") {
+  if (network === "test" || network === "soliditycoverage") {
     // Being lazy, do nothing...
   } else {
     // For live networks, use the 0 address to allow the ChainlinkRegistry

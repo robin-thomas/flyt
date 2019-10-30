@@ -60,3 +60,4 @@ typings/
 # build output
 src/keys.json
 dist
+coverage.json

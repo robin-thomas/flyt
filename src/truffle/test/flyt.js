@@ -6,7 +6,7 @@ const l = require("./helpers/linkToken");
 const {expectRevert} = require("@openzeppelin/test-helpers");
 
 const Flyt = artifacts.require("Flyt");
-const Oracle = artifacts.require("Oracle.sol");
+const Oracle = artifacts.require("Oracle");
 
 const encodeUint256 = int => {
   let zeros =
