@@ -25,7 +25,7 @@ const Flyt = {
     try {
       // Make sure to trigger this contract function only once.
       const value = await Cache.get(policyId, Cache.TRIGGER_PREMIUM);
-      if (value === undefined) {
+      if (value === undefined && process.env.NODE_ENV !== "test") {
         // Trigger the function to calculate the premium.
         Contract.invokeFn(
           "calculatePremium",

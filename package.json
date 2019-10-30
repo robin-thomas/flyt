@@ -12,9 +12,11 @@
     "now-build": "npm run build && mv build dist",
     "deploy": "npm run contract:deploy && npm run dapp:deploy",
     "dapp:deploy": "now",
+    "dapp:test": "npm run dapp:api:test",
+    "dapp:api:test": "truffle compile && NODE_ENV=test mocha test/api/server.js --exit",
     "contract:deploy": "node ./scripts/deploy.js truffle",
-    "contract:test": "truffle test src/truffle/test/flyt.js",
-    "contract:coverage": "truffle run coverage --file=src/truffle/test/flyt.js"
+    "contract:test": "truffle test test/truffle/flyt.js",
+    "contract:coverage": "truffle run coverage --file=test/truffle/flyt.js"
   },
   "repository": {
     "type": "git",
@@ -49,12 +51,15 @@
     "@openzeppelin/test-helpers": "^0.5.3",
     "@truffle/contract": "^4.0.37",
     "bn.js": "^4.11.8",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "chainlink": "^0.7.6",
     "eslint-config-react-app": "^5.0.2",
     "eslint-plugin-node": "^10.0.0",
     "husky": "^3.0.9",
     "link_token": "^1.0.6",
     "lint-staged": "^9.4.2",
+    "mocha": "^6.2.2",
     "prettier": "^1.18.2",
     "prettier-plugin-solidity": "^1.0.0-alpha.34",
     "solidity-coverage": "^0.7.0-beta.2"

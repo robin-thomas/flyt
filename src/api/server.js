@@ -153,3 +153,6 @@ app.listen(port, () => {
 
   Scheduler.scheduleJob();
 });
+
+// Export our app for testing purposes
+module.exports = app;
