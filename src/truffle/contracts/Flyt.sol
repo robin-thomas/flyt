@@ -2,11 +2,17 @@ pragma solidity >=0.5.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 import "chainlink/v0.5/contracts/ChainlinkClient.sol";
+import "chainlink/v0.5/contracts/vendor/Ownable.sol";
 import {
     SafeMath as SafeMath_Chainlink
 } from "chainlink/v0.5/contracts/vendor/SafeMath.sol";
 
-contract Flyt is ChainlinkClient {
+/**
+ * @title Flyt is a contract which requests data from the Chainlink network
+ * @dev This contract is designed to work on multiple networks, including
+ * local test networks
+ */
+contract Flyt is ChainlinkClient, Ownable {
     using SafeMath_Chainlink for uint256;
 
     bytes32 private constant JOB_ID = "3cff0a3524694ff8834bda9cf9c779a1";
@@ -15,7 +21,8 @@ contract Flyt is ChainlinkClient {
     string private constant GET_AIRPORT_DELAY_URL = "https://flyt.robinthomas2591.now.sh/airport/delay";
     string private constant GET_FLIGHT_RATING_URL = "https://flyt.robinthomas2591.now.sh/flight/stats";
 
-    address public owner;
+    bytes32 jobId;
+    uint256 payment;
 
     struct Flight {
         string from;
@@ -57,18 +64,32 @@ contract Flyt is ChainlinkClient {
     mapping(string => Premium) premiums;
     mapping(bytes32 => string) requests;
 
-    constructor() public {
-        setPublicChainlinkToken();
-        owner = msg.sender; // set the owner of the contract.
-    }
-
-    modifier _ownerOnly() {
-        require(msg.sender == owner);
-        _;
+    /**
+     * @notice Deploy the contract with a specified address for the LINK
+     * and Oracle contract addresses
+     * @dev Sets the storage for the specified addresses
+     * @param _link The address of the LINK token contract
+     * @param _oracle The address of the ORACLE contract
+     * @param _jobId jobId where the Chainlink request to be sent.
+     */
+    constructor(address _link, address _oracle, bytes32 _jobId) public {
+        // Set the address for the LINK token for the network.
+        if (_link == address(0)) {
+            // Useful for deploying to public networks.
+            setPublicChainlinkToken();
+            setChainlinkOracle(ORACLE);
+            jobId = JOB_ID;
+            payment = 1 * LINK;
+        } else {
+            setChainlinkToken(_link);
+            setChainlinkOracle(_oracle);
+            jobId = _jobId;
+            payment = 1;
+        }
     }
 
     // Create a new policy.
-    function createNewPolicy(Policy memory _policy) public _ownerOnly {
+    function createNewPolicy(Policy memory _policy) public onlyOwner {
         policies[_policy.policyId] = _policy;
         isPolicy[_policy.policyId] = true;
     }
@@ -77,7 +98,7 @@ contract Flyt is ChainlinkClient {
     function getPolicy(string memory _policyId)
         public
         view
-        _ownerOnly
+        onlyOwner
         returns (Policy memory)
     {
         if (isPolicy[_policyId] == true) {
@@ -103,12 +124,12 @@ contract Flyt is ChainlinkClient {
     function getPremium(string memory _policyId)
         public
         view
-        _ownerOnly
-        returns (uint256 result)
+        onlyOwner
+        returns (uint256 _result)
     {
         // Calculate the premium if chainlink requests have all returned.
         // Its done using weighted average.
-        result = 0;
+        _result = 0;
         if (
             premiums[_policyId].hasAirportRating ==
             PremiumRequestStatus.COMPLETED &&
@@ -120,7 +141,7 @@ contract Flyt is ChainlinkClient {
             // Departure Airport Rating is given 30% weightage.
             uint256 a = premiums[_policyId].flightRating.mul(7);
             uint256 f = premiums[_policyId].airportRating.mul(3);
-            result = a.add(f).div(10);
+            _result = a.add(f).div(10);
         }
     }
 
@@ -130,7 +151,7 @@ contract Flyt is ChainlinkClient {
         string memory _from,
         string memory _fsCode,
         string memory _carrierCode
-    ) public _ownerOnly {
+    ) public onlyOwner {
         // Set the initial state.
         if (premiums[_policyId].init == false) {
             premiums[_policyId].hasAirportRating = PremiumRequestStatus.INIT;
@@ -151,23 +172,16 @@ contract Flyt is ChainlinkClient {
         private
         returns (bytes32 requestId)
     {
-        Chainlink.Request memory req = buildChainlinkRequest(
-            JOB_ID,
-            address(this),
+        string memory _url = string(
+            abi.encodePacked(GET_AIRPORT_DELAY_URL, "?airport=", _airport)
+        );
+        string memory _path = string(abi.encodePacked(_airport, ".score"));
+
+        requestId = createRequestTo(
+            _url,
+            _path,
             this.setAirportRating.selector
         );
-
-        req.add(
-            "get",
-            string(
-                abi.encodePacked(GET_AIRPORT_DELAY_URL, "?airport=", _airport)
-            )
-        );
-
-        req.add("path", string(abi.encodePacked(_airport, ".score")));
-        req.addInt("times", 1);
-
-        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
 
         requests[requestId] = _policyId;
         premiums[_policyId].hasAirportRating = PremiumRequestStatus.SENT;
@@ -188,30 +202,23 @@ contract Flyt is ChainlinkClient {
         string memory _fsCode,
         string memory _carrierCode
     ) private returns (bytes32 requestId) {
-        Chainlink.Request memory req = buildChainlinkRequest(
-            JOB_ID,
-            address(this),
-            this.setFlightRating.selector
-        );
-
-        req.add(
-            "get",
-            string(
-                abi.encodePacked(
-                    GET_FLIGHT_RATING_URL,
-                    "?from=",
-                    _from,
-                    "&fsCode=",
-                    _fsCode,
-                    "&carrierCode=",
-                    _carrierCode
-                )
+        string memory _url = string(
+            abi.encodePacked(
+                GET_FLIGHT_RATING_URL,
+                "?from=",
+                _from,
+                "&fsCode=",
+                _fsCode,
+                "&carrierCode=",
+                _carrierCode
             )
         );
 
-        req.add("path", "score");
-
-        requestId = sendChainlinkRequestTo(ORACLE, req, 1 * LINK);
+        requestId = createRequestTo(
+            _url,
+            "score",
+            this.setFlightRating.selector
+        );
 
         requests[requestId] = _policyId;
         premiums[_policyId].hasFlightRating = PremiumRequestStatus.SENT;
@@ -226,9 +233,32 @@ contract Flyt is ChainlinkClient {
         premiums[requests[_requestId]].flightRating = _rating;
     }
 
+    /**
+     * @notice Creates a request to the specified Oracle contract address
+     * @dev This function ignores the stored Oracle contract address and
+     * will instead send the request to the address specified
+     * @param _url The URL to fetch data from
+     * @param _path The dot-delimited path to parse of the response
+     * @param _callbackFn The callback function to call once request is processed
+     */
+    function createRequestTo(
+        string memory _url,
+        string memory _path,
+        bytes4 _callbackFn
+    ) private returns (bytes32 requestId) {
+        Chainlink.Request memory req = buildChainlinkRequest(
+            jobId,
+            address(this),
+            _callbackFn
+        );
+        req.add("url", _url);
+        req.add("path", _path);
+        requestId = sendChainlinkRequest(req, payment);
+    }
+
     function payPolicy(string memory _policyId, uint256 amount)
         public
-        _ownerOnly
+        onlyOwner
     {
         require(isPolicy[_policyId] == true);
         require(policies[_policyId].owner != address(0));
