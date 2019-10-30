@@ -51,5 +51,8 @@
       "src": ".*",
       "dest": "public/index.html"
     }
-  ]
+  ],
+  "github": {
+    "silent": "true"
+  }
 }
