@@ -48,6 +48,12 @@
       "methods": ["GET"]
     },
     {
+      "src": "/swagger",
+      "dest": "src/api/server.js",
+      "headers": {"Access-Control-Allow-Origin": "*"},
+      "methods": ["GET"]
+    },
+    {
       "src": ".*",
       "dest": "public/index.html"
     }

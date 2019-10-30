@@ -17976,12 +17976,12 @@
         }
       },
       "links": {},
-      "address": "0x02787881A4C7D23434197D6986B0CA725fbFe4e0",
-      "transactionHash": "0xb101f39ed250bff1f9dbe84c54a9279c8a336886115cd63a725d67f82aed59ef"
+      "address": "0x0F1CED52223412A731D0a15F2f71b063e40c98BB",
+      "transactionHash": "0x3086825d8ba98a500e00bfba74ab0a020592d960873350a5696649099a293bbc"
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-10-30T09:01:19.059Z",
+  "updatedAt": "2019-10-30T11:10:13.117Z",
   "devdoc": {
     "details": "This contract is designed to work on multiple networks, including local test networks",
     "methods": {

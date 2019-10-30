@@ -46,6 +46,8 @@
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.10.2",
     "react-scripts": "^3.2.0",
+    "swagger-jsdoc": "^3.4.0",
+    "swagger-ui-express": "^4.1.2",
     "web3": "^1.2.1"
   },
   "devDependencies": {
