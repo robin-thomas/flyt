@@ -1,0 +1,3 @@
+{
+  "exclude": ["truffle-config.js", "test", "src/api/scheduler.js"]
+}

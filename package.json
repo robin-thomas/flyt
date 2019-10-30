@@ -14,6 +14,7 @@
     "dapp:deploy": "now",
     "dapp:test": "npm run dapp:api:test",
     "dapp:api:test": "truffle compile && NODE_ENV=test mocha test/api/server.js --exit",
+    "dapp:api:coverage": "nyc npm run dapp:api:test",
     "contract:deploy": "node ./scripts/deploy.js truffle",
     "contract:test": "truffle test test/truffle/flyt.js",
     "contract:coverage": "truffle run coverage --file=test/truffle/flyt.js"
@@ -60,6 +61,7 @@
     "link_token": "^1.0.6",
     "lint-staged": "^9.4.2",
     "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
     "prettier": "^1.18.2",
     "prettier-plugin-solidity": "^1.0.0-alpha.34",
     "solidity-coverage": "^0.7.0-beta.2"
