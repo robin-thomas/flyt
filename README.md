@@ -98,19 +98,34 @@ $ npm run contract:test
 $ npm run contract:coverage
 ```
 
-# Installation
-Installation of **flyt** has two parts:
-- Installation of flyt dapp
-- Installation of flyt smart contracts
+# Deployment
+Deployment of **flyt** has two parts:
+- Deployment of flyt smart contracts
+- Deployment of flyt dapp
 
-### Installation of flyt dapp
-As explained above, flyt dapp has two parts - frontend & backend. Currently its using free [Now](https://zeit.co/) hosting. All you need to do is to create a Now account, and then run the below command.
+There is also a command to deploy both smart contracts & dapp together:
+
+```sh
+$ npm run deploy
+```
+
+### Deployment of flyt smart contracts
+Flyt smart contracts can be deployed to **Ropsten** ethereum testnet, by running the below command:
+
+```sh
+$ npm run contract:deploy
+```
+
+Compiled versions of the smart contracts will be stored in `src/truffle/_build/contracts`.
+
+### Deployment of flyt dapp
+As explained above, flyt dapp has two parts - frontend & backend. Currently its using free [Now](https://zeit.co/) hosting for both. All you need to do is to create a Now account, and then run the below command.
 
 ```sh
 $ npm run dapp:deploy
 ```
 
-Make sure you create a file called **keys.json** in `/src` directory. It follows the below structure.
+Make sure you create a file called **keys.json** in `/src` directory before deploying the dapp. It follows the below structure.
 ```json
 {
   "infura": {
@@ -132,19 +147,3 @@ Make sure you create a file called **keys.json** in `/src` directory. It follows
 To get `<infura key>`, create an account here: https://infura.io/dashboard
 
 To get `<flightstats appId>` & `<flightstats appKey>`, create an account here: https://developer.flightstats.com/products
-
-### Installation of flyt smart contracts
-Flyt smart contracts can be deployed to **Ropsten** ethereum testnet, by running the below command:
-
-```sh
-$ npm run contract:deploy
-```
-
-Compiled versions of the smart contracts will be stored in `src/truffle/_build/contracts`.
-
-
-There is also a command to deploy both smart contracts & dapp together:
-
-```sh
-$ npm run deploy
-```
