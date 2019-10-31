@@ -1,4 +1,4 @@
-# Piper
+# Flyt
 ![](https://img.shields.io/badge/nodejs-12.04-blue.svg)
 ![](https://img.shields.io/badge/solidity-0.5.8-red)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -25,11 +25,34 @@ We have no concept of insurance claims thanks to our blockchain technology. Ever
 * Nothing for the user to do other than buying a policy!
 
 # Architecture
-* The front-end code is written on React, CSS and HTML
-* Express server for handling API requests & payment callbacks
-* Ropsten ethereum testnet + Solidity smart contracts
 
-You can view the swagger docs for the APIs used here: https://flyt.robinthomas2591.now.sh/swagger
+##### Frontend
+The front-end code is written using React, CSS and HTML.
+
+The UI is designed in the form of a stepper form. Once the user selects the departure and arrival airport and departure date, a selection of flights satisfying those criterias will be displayed, from which one should be selected. The user also has the option to add items for which he/she needs to be insured for.
+
+Next is the payment page. The premium the user needs to pay is based on the amount of risk for that policy. The risk is calculated from:
+- 70% weightage = past performance of that flight (any cancellations, flight delayed for 15, 30, 45 minutes and so on).
+- 30% weightage = departure airport delays (any cancellations, flights delayed for 15, 30, 45 minutes and so on)
+If the risk is high, the premium to be paid will also be higher.
+
+The premium calculation is done thanks to Chainlink and smart contracts (which is explained in the blockchain section).
+
+##### Backend
+Backend is an express server for handling API requests and for payment callbacks (from Kyber).
+
+All flight related APIs are routed through our backend, as the API key & secrets are not stored in this github repo (but rather in our server). Likewise, the private keys of our ethereum account.
+
+The server also uses a key-value cache to speed up some calculations and performance improvements.
+
+**You can view the swagger docs for the APIs used here**: https://flyt.robinthomas2591.now.sh/swagger
+
+##### Blockchain
+Our smart contract (Flyt.sol) is deployed to Ropsten ethereum testnet.
+
+When a request comes in to calculate the premium for a policy, it'll create 2 Chainlink requests to be sent to the Oracle - once to calculate the aiport rating and the other to calculate the flight rating. When any of the jobs are completed, it'll **update the state of the Premium object for that policy**. Then (thanks to safemath operations), we use **weighted average** method to calculate the premium risk.
+
+This is then passed to the backend server.
 
 # Tests
 Tests are categorised into:
