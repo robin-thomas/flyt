@@ -7,7 +7,12 @@
 1. [Introduction](#introduction)
 2. [Features](#features)
 3. [Architecture](#architecture)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+    - [Blockchain](#blockchain)
 4. [Tests](#tests)
+    - [API Tests](#api-tests)
+    - [Smart Contract Tests](#smart-contract-tests)
 
 # Introduction
 **Flyt** is a Flight Insurance dapp running on Ropsten ethereum testnet.
