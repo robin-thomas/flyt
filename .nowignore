@@ -1,5 +1,5 @@
 dist
-scripts
+scripts/deploy.js
 src/truffle/contracts
 src/truffle/migrations
 truffle-config.json

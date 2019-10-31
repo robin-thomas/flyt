@@ -2,7 +2,7 @@ const express = require("express");
 
 const _ = require("lodash");
 const LZUTF8 = require("lzutf8");
-const swaggerUi = require("swagger-ui-express");
+const path = require("path");
 
 const parseISO = require("date-fns/parseISO");
 const format = require("date-fns/format");
@@ -277,7 +277,8 @@ app.get(config.app.api.getPremium.path, async (req, res) => {
   res.status(200).send({premium});
 });
 
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(Swagger));
+// Generate the swagger docs.
+Swagger(app);
 
 const port = !_.isUndefined(process.env.PORT) ? process.env.PORT : 4000;
 app.listen(port, () => {

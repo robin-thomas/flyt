@@ -48,7 +48,19 @@
       "methods": ["GET"]
     },
     {
-      "src": "/swagger",
+      "src": "/swagger/swagger-ui-bundle.js",
+      "dest": "dist/static/js/swagger-ui-bundle.js",
+      "headers": {"Access-Control-Allow-Origin": "*"},
+      "methods": ["GET"]
+    },
+    {
+      "src": "/swagger/swagger-ui-standalone-preset.js",
+      "dest": "dist/static/js/swagger-ui-standalone-preset.js",
+      "headers": {"Access-Control-Allow-Origin": "*"},
+      "methods": ["GET"]
+    },
+    {
+      "src": "/swagger(.*)$",
       "dest": "src/api/server.js",
       "headers": {"Access-Control-Allow-Origin": "*"},
       "methods": ["GET"]
