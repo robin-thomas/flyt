@@ -1,6 +1,7 @@
-import React, {useContext, useState, useEffect} from "react";
+import React, {useContext, useState, useEffect, useRef} from "react";
 
-import {Spinner} from "react-bootstrap";
+import {MDBIcon} from "mdbreact";
+import {Spinner, OverlayTrigger, Popover, Button} from "react-bootstrap";
 
 import Flyt from "../../utils/Flights";
 import Kyber from "../../utils/Kyber";
@@ -11,6 +12,7 @@ import Airports from "../../../airports.json";
 
 const StepperFormPayment = ({setIndex, setNextDisabled}) => {
   const ctx = useContext(DataContext);
+  const ref = useRef(null);
 
   // to be set after premium is calculated.
   const [eth, setEth] = useState(0);
@@ -71,8 +73,37 @@ const StepperFormPayment = ({setIndex, setNextDisabled}) => {
           <p style={{fontSize: "13px"}}>* Calculating insurance premium</p>
           <Spinner animation="border" role="status" />
         </div>
-      ) : null}
-      <EmptyRow height="60px" />
+      ) : (
+        <div ref={ref}>
+          <p style={{fontSize: "15px"}}>
+            Insurance premium to be paid: <b>{eth} ETH</b>&nbsp;
+            <OverlayTrigger
+              trigger="click"
+              placement="right"
+              container={ref.current}
+              rootClose={true}
+              overlay={
+                <Popover id="popover-positioned-right">
+                  <Popover.Title as="h3">
+                    How do we calculate the insurance premium?
+                  </Popover.Title>
+                  <Popover.Content>
+                    <Button
+                      variant="success"
+                      onClick={() => ctx.setOpenAbout(true)}
+                    >
+                      Click me to see
+                    </Button>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <MDBIcon far icon="question-circle" style={{cursor: "pointer"}} />
+            </OverlayTrigger>
+          </p>
+        </div>
+      )}
+      <EmptyRow height="50px" />
       <Kyber
         eth={eth}
         disabled={eth === 0}
