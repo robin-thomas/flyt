@@ -91,7 +91,7 @@ code {
 
 .stepper-form-container {
   height: calc(100vh - 50px);
-  background-image: url(https://apacsteadbspltfmcdn.azureedge.net/assets/img/bgd_travel.jpeg);
+  background-image: url(/assets/flyt.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 15%;

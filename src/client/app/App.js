@@ -11,7 +11,7 @@ const App = () => (
     <div className="stepper-form-container">
       <EmptyRow height="50px" />
       <Stepper />
-      <EmptyRow height="100px" />
+      <EmptyRow height="80px" />
       <Footer />
     </div>
   </div>

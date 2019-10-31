@@ -70,6 +70,12 @@
       "methods": ["GET"]
     },
     {
+      "src": "/assets/flyt.jpeg",
+      "dest": "src/assets/flyt.jpeg",
+      "headers": {"Access-Control-Allow-Origin": "*"},
+      "methods": ["GET"]
+    },
+    {
       "src": ".*",
       "dest": "public/index.html"
     }
