@@ -52,6 +52,17 @@ The server also uses a key-value cache to speed up some calculations and perform
 
 **You can view the swagger docs for the APIs used here**: https://flyt.robinthomas2591.now.sh/swagger
 
+##### Calculating the Policy maturity payment:
+The policy maturity payment is calculated based on the delay, cancellation of the flight and the insurance products againt which the user has insured for.
+
+**Max possible payment is set to the cancellation rate (which is 1 ETH).**
+
+Once the total delay (including the departure and arrival) is calculated, then the total payment is calculated by the following stub:
+- first 15 minutes delay are paid at a rate of 0.001 ETH per minute
+- next 30 minutes are paid at a rate of 0.002 ETH per minute
+- next 60 minutes are paid at a rate of 0.003 ETH per minute
+- next 120 minutes are paid at a rate of 0.004 ETH per minute
+
 ### Blockchain
 Our smart contract (Flyt.sol) is deployed to Ropsten ethereum testnet.
 
