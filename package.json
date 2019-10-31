@@ -13,6 +13,7 @@
     "deploy": "npm run contract:deploy && npm run dapp:deploy",
     "dapp:deploy": "now",
     "dapp:test": "npm run dapp:api:test",
+    "dapp:coverage": "npm run dapp:api:coverage",
     "dapp:api:test": "truffle compile && NODE_ENV=test mocha test/api/server.js --exit",
     "dapp:api:coverage": "nyc npm run dapp:api:test",
     "contract:deploy": "node ./scripts/deploy.js truffle",
@@ -66,6 +67,7 @@
     "nyc": "^14.1.1",
     "prettier": "^1.18.2",
     "prettier-plugin-solidity": "^1.0.0-alpha.34",
+    "sinon": "^7.5.0",
     "solidity-coverage": "^0.7.0-beta.2"
   },
   "husky": {

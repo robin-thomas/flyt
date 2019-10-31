@@ -88,8 +88,26 @@ contract Flyt is ChainlinkClient, Ownable {
         }
     }
 
+    // Calculate the value based on weighted average.
+    // Flight Rating (based on historical performance) is given 70% weightage.
+    // Departure Airport Rating is given 30% weightage.
+    function calcPremiumHelper(string memory _policyId)
+        private
+        view
+        onlyOwner
+        returns (uint256 _result)
+    {
+        uint256 a = premiums[_policyId].flightRating.mul(7);
+        uint256 f = premiums[_policyId].airportRating.mul(3);
+        _result = a.add(f).div(10);
+    }
+
     // Create a new policy.
     function createNewPolicy(Policy memory _policy) public onlyOwner {
+        // Verify that the payment is valid.
+        uint256 _premium = calcPremiumHelper(_policy.policyId);
+        require(_premium <= _policy.premium.amount);
+
         policies[_policy.policyId] = _policy;
         isPolicy[_policy.policyId] = true;
     }
@@ -136,12 +154,7 @@ contract Flyt is ChainlinkClient, Ownable {
             premiums[_policyId].hasFlightRating ==
             PremiumRequestStatus.COMPLETED
         ) {
-            // Calculate the value based on weighted average.
-            // Flight Rating (based on historical performance) is given 70% weightage.
-            // Departure Airport Rating is given 30% weightage.
-            uint256 a = premiums[_policyId].flightRating.mul(7);
-            uint256 f = premiums[_policyId].airportRating.mul(3);
-            _result = a.add(f).div(10);
+            _result = calcPremiumHelper(_policyId);
         }
     }
 

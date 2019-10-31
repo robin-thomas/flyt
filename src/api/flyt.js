@@ -89,11 +89,15 @@ const Flyt = {
       for (const product of policy.products) {
         switch (product) {
           case "Flight Departure Delay":
-            delay += status.departureGateDelayMinutes;
+            delay += isNaN(status.departureGateDelayMinutes)
+              ? 0
+              : status.departureGateDelayMinutes;
             break;
 
           case "Flight Arrival Delay":
-            delay += status.arrivalGateDelayMinutes;
+            delay += isNaN(status.arrivalGateDelayMinutes)
+              ? 0
+              : status.arrivalGateDelayMinutes;
             break;
 
           case "Flight Cancellation":
@@ -114,7 +118,7 @@ const Flyt = {
       // Next Z minutes get paid at rate Rc, and so on.
       let slabs = Object.keys(config.app.payment.delay)
         .map(e => Number(e))
-        .sort();
+        .sort((a, b) => a - b);
 
       let payment = 0;
       let slabIndex = 0;
@@ -144,10 +148,6 @@ const Flyt = {
   },
 
   getFlightStatus: async (from, to, code, date) => {
-    const parsedDate = parseISO(date);
-
-    const key = `${from}-${to}-${code}-${format(parsedDate, "yyyyMMddH")}`;
-
     const getFlightStatus = flightStatuses => {
       for (const flightStatus of flightStatuses) {
         if (
@@ -162,6 +162,9 @@ const Flyt = {
         }
       }
     };
+
+    const parsedDate = parseISO(date);
+    const key = `${from}-${to}-${code}-${format(parsedDate, "yyyyMMddH")}`;
 
     const value = await Cache.get(key, Cache.FLIGHT);
     if (value !== undefined && value !== null) {
@@ -184,7 +187,7 @@ const Flyt = {
       throw new Error("Date interval should be within 7 days!");
     }
 
-    const url = config.flightstats.getFlightStatsByRoute
+    const url = config.flightstats.api.getFlightStatsByRoute
       .replace("{from}", from)
       .replace("{to}", to)
       .replace("{year}", format(parsedDate, "yyyy"))
