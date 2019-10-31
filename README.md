@@ -26,7 +26,7 @@ We have no concept of insurance claims thanks to our blockchain technology. Ever
 
 # Architecture
 
-#### Frontend
+### Frontend
 The front-end code is written using React, CSS and HTML.
 
 The UI is designed in the form of a stepper form. Once the user selects the departure and arrival airport and departure date, a selection of flights satisfying those criterias will be displayed, from which one should be selected. The user also has the option to add items for which he/she needs to be insured for.
@@ -38,7 +38,7 @@ If the risk is high, the premium to be paid will also be higher.
 
 The premium calculation is done thanks to Chainlink and smart contracts (which is explained in the blockchain section).
 
-#### Backend
+### Backend
 Backend is an express server for handling API requests and for payment callbacks (from Kyber).
 
 All flight related APIs are routed through our backend, as the API key & secrets are not stored in this github repo (but rather in our server). Likewise, the private keys of our ethereum account.
@@ -47,7 +47,7 @@ The server also uses a key-value cache to speed up some calculations and perform
 
 **You can view the swagger docs for the APIs used here**: https://flyt.robinthomas2591.now.sh/swagger
 
-#### Blockchain
+### Blockchain
 Our smart contract (Flyt.sol) is deployed to Ropsten ethereum testnet.
 
 When a request comes in to calculate the premium for a policy, it'll create 2 Chainlink requests to be sent to the Oracle - once to calculate the aiport rating and the other to calculate the flight rating. When any of the jobs are completed, it'll **update the state of the Premium object for that policy**. Then (thanks to safemath operations), we use **weighted average** method to calculate the premium risk.
@@ -59,7 +59,7 @@ Tests are categorised into:
 - API tests
 - Smart contract tests
 
-##### API Tests
+### API Tests
 API tests are run by spawning a local instance of the *express* server that will then connect to the Ropsten ethereum test network before running the tests. These tests are written using *mocha* and *chai*. Test coverage is from *nyc*.
 
 Since the private key of the ethereum wallet is not shared in this github repo, only pure/view contract functions can be executed by these API functional tests. As such, all other contract functions are not covered by these tests.
@@ -69,7 +69,7 @@ npm run dapp:api:test
 npm run dapp:api:coverage
 ```
 
-##### Smart Contract Tests
+### Smart Contract Tests
 Smart Contract tests are written using *mocha* and are executed with the help of *truffle*. Test coverage is from *solidity-coverage*.
 
 These tests cover both pure/view and stateful smart contract functions and have almost full coverage of the Flyt contract (barring the section of code that is used to set Chainlink public network details).
