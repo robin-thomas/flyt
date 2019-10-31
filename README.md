@@ -52,7 +52,7 @@ The server also uses a key-value cache to speed up some calculations and perform
 
 **You can view the swagger docs for the APIs used here**: https://flyt.robinthomas2591.now.sh/swagger
 
-##### Calculating the Policy maturity payment:
+#### Calculating the Policy maturity payment:
 The policy maturity payment is calculated based on the delay, cancellation of the flight and the insurance products againt which the user has insured for.
 
 **Max possible payment is set to the cancellation rate (which is 1 ETH).**
