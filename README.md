@@ -13,6 +13,7 @@
 4. [Tests](#tests)
     - [API Tests](#api-tests)
     - [Smart Contract Tests](#smart-contract-tests)
+5. [Installation](#installation)
 
 # Introduction
 **Flyt** is a Flight Insurance dapp running on Ropsten ethereum testnet.
@@ -81,8 +82,8 @@ API tests are run by spawning a local instance of the *express* server that will
 Since the private key of the ethereum wallet is not shared in this github repo, only pure/view contract functions can be executed by these API functional tests. As such, all other contract functions are not covered by these tests.
 
 ```sh
-npm run dapp:api:test
-npm run dapp:api:coverage
+$ npm run dapp:api:test
+$ npm run dapp:api:coverage
 ```
 
 ### Smart Contract Tests
@@ -93,6 +94,57 @@ These tests cover both pure/view and stateful smart contract functions and have 
 These tests are run in a test *ganache* network, which mocks the Chainlink network (by creating a LINK token, an ORACLE contract and using those with the Flyt contract). The LINK token is used for making Chainlink requests. Fulfillment function of the oracle is mocked based on the chainlink request to be made.
 
 ```sh
-npm run contract:test
-npm run contract:coverage
+$ npm run contract:test
+$ npm run contract:coverage
+```
+
+# Installation
+Installation of **flyt** has two parts:
+- Installation of flyt dapp
+- Installation of flyt smart contracts
+
+### Installation of flyt dapp
+As explained above, flyt dapp has two parts - frontend & backend. Currently its using free [Now](https://zeit.co/) hosting. All you need to do is to create a Now account, and then run the below command.
+
+```sh
+$ npm run dapp:deploy
+```
+
+Make sure you create a file called **keys.json** in `/src` directory. It follows the below structure.
+```json
+{
+  "infura": {
+    "ropsten": {
+      "api": "https://ropsten.infura.io/v3/<infura key>",
+      "key": "<infura key>"
+    }
+  },
+  "metamask": {
+    "mnemonic": "<metamask mnemonic of your ethereum wallet>"
+  },
+  "flightstats": {
+    "appId": "<flightstats appId>",
+    "appKey": "<flightstats appKey>"
+  }
+}
+```
+
+To get `<infura key>`, create an account here: https://infura.io/dashboard
+
+To get `<flightstats appId>` & `<flightstats appKey>`, create an account here: https://developer.flightstats.com/products
+
+### Installation of flyt smart contracts
+Flyt smart contracts can be deployed to **Ropsten** ethereum testnet, by running the below command:
+
+```sh
+$ npm run contract:deploy
+```
+
+Compiled versions of the smart contracts will be stored in `src/truffle/_build/contracts`.
+
+
+There is also a command to deploy both smart contracts & dapp together:
+
+```sh
+$ npm run deploy
 ```
