@@ -29,6 +29,8 @@ We have no concept of insurance claims thanks to our blockchain technology. Ever
 * Express server for handling API requests & payment callbacks
 * Ropsten ethereum testnet + Solidity smart contracts
 
+You can view the swagger docs for the APIs used here: https://flyt.robinthomas2591.now.sh/swagger
+
 # Tests
 Tests are categorised into:
 - API tests
