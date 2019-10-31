@@ -13,6 +13,7 @@ const airports = require("../client/airports.json");
 const airlines = require("../client/airlines.json");
 
 const Flyt = {
+  // Convert airport names into IATA code.
   toIata: name => {
     try {
       return airports[name].iata;
@@ -21,6 +22,8 @@ const Flyt = {
     }
   },
 
+  // Calculate the premium value if not calculated before.
+  // and then return it.
   getPremium: async (policyId, from, fsCode, carrierCode) => {
     try {
       // Make sure to trigger this contract function only once.
@@ -60,6 +63,7 @@ const Flyt = {
     }
   },
 
+  // Calculate the payment to be made after a policy matures.
   calculatePayment: async policyId => {
     try {
       const policy = await Contract.invokeFn(

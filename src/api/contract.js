@@ -30,6 +30,9 @@ const Contract = {
     );
   },
 
+  // This function is used to invoke a function in the smart contract.
+  // isPure will be set for functions that do not change state.
+  // ...args are passed to the contract function.
   invokeFn: async (fnName, isPure, ...args) => {
     const _provider = Contract.getWeb3Provider();
     const _web3 = Contract.getWeb3(_provider);
@@ -98,6 +101,7 @@ const Contract = {
     }
   },
 
+  // sleep for given ms milliseconds.
   sleep: ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
