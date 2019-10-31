@@ -55,7 +55,7 @@ The server also uses a key-value cache to speed up some calculations and perform
 #### Calculating the Policy maturity payment:
 The policy maturity payment is calculated based on the delay, cancellation of the flight and the insurance products againt which the user has insured for.
 
-**Max possible payment is set to the cancellation rate (which is 1 ETH).**
+*Max possible payment is set to the cancellation rate (which is 1 ETH).*
 
 Once the total delay (including the departure and arrival) is calculated, then the total payment is calculated by the following stub:
 - first 15 minutes delay are paid at a rate of 0.001 ETH per minute
