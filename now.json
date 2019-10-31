@@ -9,6 +9,10 @@
     {
       "src": "src/api/server.js",
       "use": "@now/node-server"
+    },
+    {
+      "src": "src/assets/*",
+      "use": "@now/static"
     }
   ],
   "routes": [
@@ -49,13 +53,13 @@
     },
     {
       "src": "/swagger/swagger-ui-bundle.js",
-      "dest": "dist/static/js/swagger-ui-bundle.js",
+      "dest": "src/assets/swagger-ui-bundle.js",
       "headers": {"Access-Control-Allow-Origin": "*"},
       "methods": ["GET"]
     },
     {
       "src": "/swagger/swagger-ui-standalone-preset.js",
-      "dest": "dist/static/js/swagger-ui-standalone-preset.js",
+      "dest": "src/assets/swagger-ui-standalone-preset.js",
       "headers": {"Access-Control-Allow-Origin": "*"},
       "methods": ["GET"]
     },

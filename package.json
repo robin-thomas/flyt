@@ -9,7 +9,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "now-build": "npm run build && mv build dist && sh scripts/swagger.sh",
+    "now-build": "npm run build && mv build dist",
     "deploy": "npm run contract:deploy && npm run dapp:deploy",
     "dapp:deploy": "now",
     "dapp:test": "npm run dapp:api:test",
