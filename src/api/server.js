@@ -21,12 +21,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 
-/**
- * @swagger
- * /callback:
- *   post:
- *     description: This api is triggered after payment is completed
- */
+// This api is triggered after payment is completed
 app.post(config.app.api.callback.path, async (req, res) => {
   let policy = decodeURIComponent(req.body.policy);
   policy = LZUTF8.decompress(policy, {inputEncoding: "Base64"});
