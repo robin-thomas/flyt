@@ -3,6 +3,10 @@
 ![](https://img.shields.io/badge/solidity-0.5.8-red)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+**Demo:** https://flyt.robinthomas2591.now.sh/
+
+**Swagger docs for APIs:** https://flyt.robinthomas2591.now.sh/swagger
+
 # Table of Contents
 1. [Introduction](#introduction)
 2. [Features](#features)
@@ -50,8 +54,6 @@ Backend is an express server for handling API requests and for payment callbacks
 All flight related APIs are routed through our backend, as the API key & secrets are not stored in this github repo (but rather in our server). Likewise, the private keys of our ethereum account.
 
 The server also uses a key-value cache to speed up some calculations and performance improvements.
-
-**You can view the swagger docs for the APIs used here**: https://flyt.robinthomas2591.now.sh/swagger
 
 #### Calculating the Policy maturity payment:
 The policy maturity payment is calculated based on the delay, cancellation of the flight and the insurance products againt which the user has insured for.
