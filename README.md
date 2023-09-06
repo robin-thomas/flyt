@@ -3,6 +3,8 @@
 ![](https://img.shields.io/badge/solidity-0.5.8-red)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+## [Winner of CoinList + Chainlink hackathon!!](https://blog.chain.link/winners-of-the-chainlink-virtual-hackathon/)
+
 **Demo:** https://flyt.robinthomas2591.now.sh/
 
 **Swagger docs for APIs:** https://flyt.robinthomas2591.now.sh/swagger
